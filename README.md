@@ -20,7 +20,18 @@ Devs can build scalable operations that build on one chain with minimal changes 
 
 
 # Use Cases
+- Tools (for interactions like swap, deposit, bridge)
+    - Ready-to-use functions for basic interactions:
+        - Swap tokens across any DEX
+        - Bridge assets between chains
+        - Deposit/withdraw from lending protocols
 
+- Workflows (complex automated flows)
+    - Complex trigger or Time based interactions
+        - TWAP execution for large orders
+        - Yield optimization across protocols
+        - Cross-chain liquidity management
+    - Developers can share workflows or host them private
 
 # Getting Started
 Bhsdk uses brahma account as the main mode of interaction. The account is assisted by tools, workflows and context layer to operate onchain in efficient and secure manner. The core components are open in nature so dev's can always expand capabilities from exisiting ones. 
