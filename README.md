@@ -1,6 +1,6 @@
 # Introduction 
 
-Console Kit is platform that enable agents, developers to operate, transact onchain autonomously. Console Kit solves many problems that developers and agents face while performing onchain interactions. Most of these revolve around these themes:
+Console Kit is platform that enable developers for building agents and services to transact onchain autonomously. Console Kit solves many problems that developers face while performing onchain interactions. Most of these revolve around these themes:
 1. Secure Interactions
 2. Simplified Development
 3. Scalable Operations
