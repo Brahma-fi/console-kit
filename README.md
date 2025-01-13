@@ -1,6 +1,6 @@
 # Introduction 
 
-Console Kit is platform that enable developers for building specialised agents operate onchain autonomously. Console Kit solves fundamental problems that developers face while building these onchain systems for agents to operate. Most of these revolve around these themes:
+ConsoleKit empowers developers to build specialized agents that operate autonomously onchain. It addresses the core challenges developers face when building onchain execution systems for agents, focusing on three key areas:
 1. Secure Interactions
 2. Simplified Development
 3. Scalable Operations
@@ -48,18 +48,18 @@ graph TD
 ```
 
 ## Secure Interactions
-### How does Console Kit enable secure interactions?
-Console Kit use's account as the main interaction point with the platform. The account is built with safe [smart contract wallet](https://safe.global/) . The account leverages the [safe gaurds](https://docs.safe.global/advanced/smart-account-guards) and [safe modules](https://docs.safe.global/advanced/smart-account-modules) features to enable programmatic executions without giving up the full custody of the account. The gaurd is powered by `Policy engine` that validates onchain interactions via state updates, transaction simulations and logs.  
+### How does ConsoleKit enable secure interactions?
+ConsoleKit uses smart accounts as the main interaction point. Each account is built with Safe [smart contract wallets](https://safe.global/), leveraging [Safe Guards](https://docs.safe.global/advanced/smart-account-guards) and [Safe Modules](https://docs.safe.global/advanced/smart-account-modules) to enable programmatic executions without giving up the custody of the account. The guard is powered by the `Policy Engine`, validating all onchain interactions through state updates, transaction simulations and logs.  
 
 ## Simplified Development
-### How does Console Kit simplify application code for onchain interactions ?
+### How does ConsoleKit simplify application code for onchain interactions?
 By shifting the core part of block chain interaction like protcol routes, failed rpc calls, nonce management, gas estimates to platform. There's less application code for dev's to manage and they can focus on their specific usecase and business logic. The native abstractions like tools, workflows and context layer makes it easy to repurpose existing components and build completely new components reducing overhead during development time. 
-Coupled with api driven design, developers can use the platform via programming language of their choice. 
+With its API-driven design, developers can integrate ConsoleKit using their preferred programming language, ensuring flexibility and ease of implementation.
 
 ## Scalable Operations
-### How does Console Kit help build scalable operations
-Devs can build scalable operations that build on one chain with minimal changes to be expanded easily to other chains or entirely multichain. Compared to pure smart contract based developement flow which is often expensive with audit costs and slower iterations.  The account centric model, developers to iterate faster and adapt the changes as per their usecase. Once built the same code can be used by different set of users with thier specific prefrences while infra is taken care by Console Kit reducing maintainence overhead for developers.  
-
+### How does ConsoleKit help build scalable operations?
+ConsoleKit enables developers to build operations that can seamlessly scale from single-chain to multi-chain deployments with minimal code changes. Unlike traditional smart contract development, which often involves expensive audits and slow iteration cycles, ConsoleKit's account-centric model allows for rapid iteration and adaptation to specific use cases.
+The platform handles infrastructure maintenance, allowing teams to deploy the same code across different users with their specific preferences. This shared infrastructure approach significantly reduces maintenance overhead while maintaining individual user customization capabilities.
 
 # Use Cases
 - Tools (for interactions like swap, deposit, bridge)
@@ -76,10 +76,14 @@ Devs can build scalable operations that build on one chain with minimal changes 
     - Developers can share workflows or host them private
 
 # Getting Started
-Console Kit uses brahma account as the main mode of interaction. The account is assisted by tools, workflows and context layer to operate onchain in efficient and secure manner. The core components are open in nature so dev's can always expand capabilities from exisiting ones. Developers can start with the [Brahma-Builder](https://github.com/Brahma-fi/brahma-builder) for building their custom workflows and [Brahma-Templates-SDK](https://github.com/Brahma-fi/brahma-templates-sdk) for building their custom tools. 
+Console Kit uses Brahma Accounts as the main mode of interaction. The account is assisted by tools, workflows and a context layer to operate onchain in efficient and secure manner. The core components are open in nature so devs can always expand capabilities from exisiting ones. 
+
+Developers can start with:
+- the [Brahma-Builder](https://github.com/Brahma-fi/brahma-builder) for building their custom workflows
+- [Brahma-Templates-SDK](https://github.com/Brahma-fi/brahma-templates-sdk) for building their custom tools. 
  
  ### Next Section
 - [Workflows](./Workflows.md)
- - [Tools](./Tools.md)
- - [Context Layer](./ContextLayer.md)
+- [Tools](./Tools.md)
+- [Context Layer](./ContextLayer.md)
 
