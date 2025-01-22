@@ -1,0 +1,31 @@
+{
+  "name": "brahma-templates-sdk",
+  "version": "1.0.72",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "rollup": "rollup -c --bundleConfigAsCjs",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "description": "",
+  "repository": "https://github.com/Brahma-fi/brahma-templates-sdk.git",
+  "peerDependencies": {
+    "react": ">=18.2.0"
+  },
+  "dependencies": {
+    "@rollup/plugin-typescript": "^11.1.6",
+    "axios": "^1.7.9",
+    "rollup-plugin-dts": "^6.1.1",
+    "tslib": "^2.8.1",
+    "viem": "^2.21.3"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.5",
+    "rollup": "^4.28.0",
+    "typescript": "^5.7.2"
+  },
+  "author": "impolska742 <vaibhav19bhardwaj@gmail.com>",
+  "license": "MIT"
+}
