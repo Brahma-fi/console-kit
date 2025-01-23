@@ -1,5 +1,5 @@
 {
-  "name": "@brahmaFi/console-kit",
+  "name": "@brahmafi/console-kit",
   "version": "1.0.0",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
