@@ -149,3 +149,17 @@ export type SubmitTaskResponse = {
   success: boolean;
   message?: string;
 };
+
+export type ExecutorDetails = {
+  registryId: string;
+  metadata: {
+    type: string;
+    defaultEvery: string;
+    executionTTL: string;
+  };
+  signature: string;
+  enabled: boolean;
+  created_at: string;
+  updated_at: string;
+  relayerAddresses: Address[];
+};

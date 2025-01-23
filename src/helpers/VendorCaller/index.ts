@@ -11,6 +11,7 @@ import {
   Task,
   TaskResponse,
   UpdateAutomationParams,
+  ExecutorDetails,
 } from "./types";
 import {
   AutomationLogResponse,
@@ -24,6 +25,7 @@ const routes = {
   fetchAutomationLogs: "/kernel/logs",
   indexTransaction: "/indexer/process",
   kernelTasks: "/kernel/tasks",
+  fetchExecutorDetails: "/kernel/executor",
 };
 
 export class VendorCaller {
@@ -229,6 +231,27 @@ export class VendorCaller {
     } catch (err: any) {
       console.error(`Error submitting task: ${err.message}`);
       return { success: false, message: err.message };
+    }
+  }
+
+  async fetchExecutorDetails(registryId: string): Promise<ExecutorDetails> {
+    try {
+      if (!registryId) {
+        throw new Error("Registry ID is required");
+      }
+
+      const response = await this.axiosInstance.get<{ data: ExecutorDetails }>(
+        `${routes.fetchExecutorDetails}/${registryId}`
+      );
+
+      if (!response.data.data) {
+        throw new Error("No executor details found for the given registry ID");
+      }
+
+      return response.data.data;
+    } catch (err: any) {
+      console.error(`Error fetching executor details: ${err.message}`);
+      throw err;
     }
   }
 }
