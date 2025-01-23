@@ -1,5 +1,5 @@
 {
-  "name": "@brahmafi/console-kit",
+  "name": "brahma-console-kit",
   "version": "1.0.0",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -10,7 +10,7 @@
   },
   "keywords": [],
   "description": "",
-  "repository": "https://github.com/Brahma-fi/brahma-templates-sdk.git",
+  "repository": "https://github.com/Brahma-fi/console-kit.git",
   "peerDependencies": {
     "react": ">=18.2.0"
   },
