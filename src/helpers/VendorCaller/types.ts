@@ -60,7 +60,7 @@ export type UpdateAutomationParams = {
   };
 };
 
-export type CancelAutomationParams = {
+export type VendorCancelAutomationParams = {
   subAccountAddress: Address;
   chainId: number;
   data: {
@@ -72,4 +72,80 @@ export type CancelAutomationParams = {
     }[];
     ownerConsole: Address;
   };
+};
+
+export type Task = {
+  id: string;
+  payload: {
+    executionCount: number;
+    prevExecutionAt: string;
+    prevExecutionID: string;
+    runningExecutionWorkflowIDs: string[];
+    nonce: number;
+    params: {
+      executorAddress: Address;
+      subAccountAddress: Address;
+      executorID: string;
+      chainID: number;
+      subscription: {
+        chainId: number;
+        commitHash: string;
+        createdAt: string;
+        duration: number;
+        feeAmount: string;
+        feeToken: Address;
+        id: string;
+        metadata: {
+          every: string;
+          rewardToken: Address;
+          userAddress: Address;
+        };
+        registryId: string;
+        status: number;
+        subAccountAddress: Address;
+        tokenInputs: Record<string, string>;
+        tokenLimits: Record<string, string>;
+      };
+      isHostedWorkflow: boolean;
+    };
+    schedule: {
+      every: number;
+      ID: string;
+    };
+    triggeredAt: string;
+  };
+};
+
+export type TaskResponse = {
+  data: {
+    tasks: Task[];
+    cursor: number;
+  };
+};
+
+export type SubmitTaskPayload = {
+  task: {
+    skip: boolean;
+    skipReason: string;
+    executorSignature: string;
+    executor: string;
+    subaccount: string;
+    executable: {
+      callType: number;
+      to: string;
+      value: string;
+      data: string;
+    };
+  };
+};
+
+export type SubmitTaskRequest = {
+  id: string;
+  registryId: string;
+  payload: SubmitTaskPayload;
+};
+
+export type SubmitTaskResponse = {
+  success: boolean;
+  message?: string;
 };

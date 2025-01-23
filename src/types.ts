@@ -108,3 +108,8 @@ export type InterfaceMessageEvent = MessageEvent<Response>;
 export type Response<T = MethodToResponse[Methods]> =
   | ErrorResponse
   | SuccessResponse<T>;
+
+export * from "./helpers/AutomationContextFetcher/types";
+export * from "./helpers/BuilderCaller/types";
+export * from "./helpers/PublicDeployer/types";
+export * from "./helpers/VendorCaller/types";

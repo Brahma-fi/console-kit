@@ -4,8 +4,12 @@ import {
   Account,
   AutomationRequest,
   AutomationResponse,
-  CancelAutomationParams,
+  VendorCancelAutomationParams,
+  SubmitTaskRequest,
+  SubmitTaskResponse,
   SubscribeAutomationParams,
+  Task,
+  TaskResponse,
   UpdateAutomationParams,
 } from "./types";
 import {
@@ -19,6 +23,7 @@ const routes = {
   fetchAutomationSubscriptions: "/automations/subscriptions/console",
   fetchAutomationLogs: "/kernel/logs",
   indexTransaction: "/indexer/process",
+  kernelTasks: "/kernel/tasks",
 };
 
 export class VendorCaller {
@@ -95,7 +100,7 @@ export class VendorCaller {
   }
 
   async cancelAutomation(
-    params: CancelAutomationParams
+    params: VendorCancelAutomationParams
   ): Promise<AutomationResponse> {
     try {
       const response = await this.axiosInstance.post<AutomationResponse>(
@@ -104,7 +109,7 @@ export class VendorCaller {
           id: "AUTOMATION",
           action: "CANCEL",
           params,
-        } as AutomationRequest<CancelAutomationParams>
+        } as AutomationRequest<VendorCancelAutomationParams>
       );
 
       return response.data;
@@ -180,6 +185,50 @@ export class VendorCaller {
     } catch (err: any) {
       console.error(`Error indexing transaction: ${err.message}`);
       throw err;
+    }
+  }
+
+  async fetchTasks(
+    registryId: string,
+    cursor: number = 0,
+    limit: number = 1
+  ): Promise<Task[]> {
+    try {
+      const response = await this.axiosInstance.get<TaskResponse>(
+        `${routes.kernelTasks}/${registryId}`,
+        {
+          params: { cursor, limit },
+        }
+      );
+
+      if (!response.data.data.tasks) {
+        throw new Error("No tasks found for the given registry ID");
+      }
+
+      return response.data.data.tasks;
+    } catch (err: any) {
+      console.error(`Error fetching tasks: ${err.message}`);
+      return [];
+    }
+  }
+
+  async submitTask(
+    taskRequest: SubmitTaskRequest
+  ): Promise<SubmitTaskResponse> {
+    try {
+      const response = await this.axiosInstance.post<SubmitTaskResponse>(
+        routes.kernelTasks,
+        taskRequest
+      );
+
+      if (response.status !== 200) {
+        throw new Error("Failed to submit task");
+      }
+
+      return response.data;
+    } catch (err: any) {
+      console.error(`Error submitting task: ${err.message}`);
+      return { success: false, message: err.message };
     }
   }
 }
