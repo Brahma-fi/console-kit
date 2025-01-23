@@ -14,11 +14,11 @@ import {
 } from "../AutomationContextFetcher/types";
 
 const routes = {
-  fetchExistingAccounts: "/v1/vendor/user/consoles",
-  generateCalldata: "/v1/vendor/builder/generate",
-  fetchAutomationSubscriptions: "/v1/vendor/automations/subscriptions/console",
-  fetchAutomationLogs: "/v1/vendor/kernel/logs",
-  indexTransaction: "/v1/vendor/indexer/process",
+  fetchExistingAccounts: "/user/consoles",
+  generateCalldata: "/builder/generate",
+  fetchAutomationSubscriptions: "/automations/subscriptions/console",
+  fetchAutomationLogs: "/kernel/logs",
+  indexTransaction: "/indexer/process",
 };
 
 export class VendorCaller {
