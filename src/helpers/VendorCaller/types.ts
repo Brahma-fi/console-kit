@@ -163,3 +163,52 @@ export type ExecutorDetails = {
   updated_at: string;
   relayerAddresses: Address[];
 };
+
+export type KernelExecutorConfig = {
+  type: "INTERVAL";
+  defaultEvery: string;
+  executionTTL: string;
+};
+
+export type ConsoleExecutorPayload = {
+  config: {
+    inputTokens: Address[];
+    hopAddresses: Address[];
+    feeInBPS: string;
+    feeToken: Address;
+    feeReceiver: Address;
+    limitPerExecution: boolean;
+  };
+  executor: string;
+  signature: string;
+  chainId: number;
+  timestamp: number;
+  executorMetadata: {
+    id: string;
+    name: string;
+    logo: string;
+    metadata: any;
+  };
+};
+
+export type ConsoleExecutorConfig = {
+  timestamp: number;
+  executor: string;
+  inputTokens: Address[];
+  hopAddresses: Address[];
+  feeReceiver: Address;
+  limitPerExecution: boolean;
+  clientId: string;
+};
+
+export type GenerateExecutableTypedDataParams = {
+  chainId: number;
+  pluginAddress: Address;
+  operation: number;
+  to: Address;
+  account: Address;
+  executor: Address;
+  value: string;
+  nonce: string;
+  data: string;
+};
