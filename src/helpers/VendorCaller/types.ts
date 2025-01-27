@@ -1,4 +1,5 @@
 import { Address } from "viem";
+import { TAsset } from "@/types";
 
 export type Account = {
   consoleAddress: Address;
@@ -7,9 +8,9 @@ export type Account = {
   createdAt: string;
 };
 
-type ActionType = "SUBSCRIBE" | "UPDATE" | "CANCEL";
+type ActionType = "SUBSCRIBE" | "UPDATE" | "CANCEL" | "BUILD";
 
-export type AutomationResponse = {
+export type GenerateCalldataResponse = {
   data: {
     transactions: {
       to: Address;
@@ -21,11 +22,28 @@ export type AutomationResponse = {
   };
 };
 
-export type AutomationRequest<T> = {
-  id: "AUTOMATION";
-  action: ActionType;
-  params: T;
-};
+export enum ActionNameToId {
+  send = 301,
+  swap = 309,
+  bridging = 326,
+}
+
+export type GeneratePayload<T, A extends ActionType> = A extends "BUILD"
+  ? {
+      id: "ID";
+      action: "BUILD";
+      params: {
+        id: ActionNameToId;
+        chainId: number;
+        consoleAddress: Address;
+        params: T;
+      };
+    }
+  : {
+      id: "AUTOMATION";
+      action: A;
+      params: T;
+    };
 
 export type SubscribeAutomationParams = {
   chainId: number;
@@ -95,11 +113,7 @@ export type Task = {
         feeAmount: string;
         feeToken: Address;
         id: string;
-        metadata: {
-          every: string;
-          rewardToken: Address;
-          userAddress: Address;
-        };
+        metadata: any;
         registryId: string;
         status: number;
         subAccountAddress: Address;
@@ -174,7 +188,7 @@ export type ConsoleExecutorPayload = {
   config: {
     inputTokens: Address[];
     hopAddresses: Address[];
-    feeInBPS: string;
+    feeInBPS: number;
     feeToken: Address;
     feeReceiver: Address;
     limitPerExecution: boolean;
@@ -211,4 +225,143 @@ export type GenerateExecutableTypedDataParams = {
   value: string;
   nonce: string;
   data: string;
+};
+
+export enum WorkflowExecutionStatus {
+  UNSPECIFIED = 0,
+  RUNNING = 1,
+  COMPLETED = 2,
+  FAILED = 3,
+  CANCELED = 4,
+  TERMINATED = 5,
+  CONTINUED_AS_NEW = 6,
+  TIMED_OUT = 7,
+}
+
+export type WorkflowStateResponse = {
+  status: WorkflowExecutionStatus;
+  out: {
+    metadata: any;
+    message: string;
+    createdAt: string;
+    subAccountAddress: Address;
+    chainId: number;
+    subId: string;
+    outputTxHash: string;
+  } | null;
+};
+
+export type SendParams = {
+  to: Address;
+  amount: string;
+  tokenAddress: Address;
+};
+
+export type SwapQuoteRoute = {
+  pid: number;
+  dex: string;
+  toAmount: string;
+};
+
+export type SwapParams = {
+  amountIn: string;
+  tokenIn: Address;
+  tokenOut: Address;
+  slippage: number;
+  chainId: number;
+  route: SwapQuoteRoute;
+};
+
+export type SwapQuoteRoutes = {
+  data: SwapQuoteRoute[];
+  error?: string;
+};
+
+export type GetBridgingRoutes = {
+  chainIdIn: number;
+  chainIdOut: number;
+  tokenIn: string;
+  tokenOut: string;
+  amountIn: string;
+  amountOut: string;
+  slippage: number;
+  ownerAddress: string;
+  recipient: Address;
+};
+
+type Protocol = {
+  icon: string;
+  name: string;
+};
+
+type PathItem = {
+  fromAmount: string;
+  fromChainId: number;
+  fromTokenAddress: string;
+  pathAction: "bridge" | "swap";
+  protocol: Protocol;
+  toAmount: string;
+  toChainId: number;
+  toTokenAddress: string;
+};
+
+export type GetRoutingResponse = {
+  duration: number;
+  pathItems: PathItem[];
+  pid: number;
+  toAmount: string;
+  txBuildObject: TxBuildObject;
+}[];
+
+type TxBuildObject = {
+  fromAmount: string;
+  inputValueInUsd: number;
+  outputValueInUsd: number;
+  receivedValueInUsd: number;
+  recipient: string;
+  routeId: string;
+  sender: string;
+  serviceTime: number;
+  toAmount: string;
+  totalGasFeesInUsd: number;
+};
+
+export type BridgingChainStatus = "pending" | "success" | "failed" | "invalid";
+
+export type GetBridgingStatus = {
+  destinationStatus: BridgingChainStatus;
+  destinationTransactionHash: Address;
+  sourceStatus: BridgingChainStatus;
+  sourceTransactionHash: Address;
+};
+
+export type BridgingRoute = {
+  uuid: string;
+  pid: number;
+  protocolIcon: string;
+  protocolName: string;
+  routePercentageChange: string;
+  isBestRoute: boolean;
+  tokenOut: TAsset;
+  tokenOutAmount: string;
+  tokenOutAmountInUSD: string;
+  gasUsed: string;
+  serviceTime: number;
+  txBuildObject: TxBuildObject;
+  pathItems: PathItem[];
+  bridge: string | null;
+};
+
+export type BridgeParams = {
+  chainIdIn: number;
+  chainIdOut: number;
+  tokenIn: Address;
+  tokenOut: Address;
+  tokenOutName: string;
+  amountIn: string;
+  amount: string;
+  amountOut: string;
+  route: BridgingRoute;
+  recipient: Address;
+  ownerAddress: Address;
 };
