@@ -1,10 +1,10 @@
 # Hosted Workflows
 
-While executors can independently manage user subscriptions and automation schedules, handling these operations at scale requires significant engineering resources and infrastructure. As subscription volumes grow, developers may find themselves spending more time on operational concerns like scheduling, retry logic, and state management rather than focusing on core automation strategies. Brahma's Kernel service offers a solution by providing enterprise-grade workflow infrastructure that executors can leverage to maintain focus on their core automation logic.
+While executors can independently manage user subscriptions and automation schedules, handling these operations at scale requires significant engineering resources and infrastructure. As subscription volumes grow, developers may find themselves spending more time on operational concerns like scheduling, retry logic, and state management rather than focusing on core automation strategies. Brahma's Kernel service offers a solution by providing a workflow infrastructure that executors can leverage to maintain focus on their core automation logic.
 
 ## Overview
 
-Kernel is the orchestration engine that Brahma uses internally to manage automations at scale. Now, external executors can leverage the same battle-tested infrastructure to handle their subscription management and scheduling complexities. This allows development teams to concentrate on building and optimizing their automation strategies while benefiting from Brahma's production-grade workflow management system.
+Kernel is the orchestration engine that Brahma uses internally to manage automations at scale. Now, external executors can leverage the same infrastructure to handle their subscription management and scheduling complexities. This allows development teams to concentrate on building and optimizing their automation strategies while benefiting from Brahma's workflow management system.
 
 ![Kernel Workflow](./img/kernel.png)
 
@@ -12,7 +12,7 @@ Kernel is the orchestration engine that Brahma uses internally to manage automat
 
 ### 1. Kernel Registration
 
-The first step is registering with Kernel to indicate intent to use the hosted workflow service. During registration, executors provide their executor registry ID, a webhook URL for task delivery, and configuration parameters such as polling interval and concurrent task limits. This process establishes the connection between the executor and Kernel, sets up configuration for task delivery and processing, and provides authentication credentials for subsequent interactions.
+The first step is registering with Kernel to indicate intent to use the hosted workflow service. During registration, executors provide parameters. This process establishes the connection between the executor and Kernel, sets up configuration for task delivery and processing.
 
 ```ts
 const ExecutorConfigKernel: KernelExecutorConfig = {
