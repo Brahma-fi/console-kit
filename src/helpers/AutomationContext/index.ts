@@ -1,57 +1,30 @@
-import axios, { AxiosError, AxiosInstance } from "axios";
+import axios, { AxiosInstance } from "axios";
 import { Address } from "viem";
+
 import {
-  Account,
-  VendorCancelAutomationParams,
+  AutomationLogResponse,
+  AutomationSubscription,
+  ConsoleExecutorConfig,
+  ConsoleExecutorPayload,
+  ExecutorDetails,
+  GenerateExecutableTypedDataParams,
+  KernelExecutorConfig,
   SubmitTaskRequest,
   SubmitTaskResponse,
   SubscribeAutomationParams,
   Task,
   TaskResponse,
   UpdateAutomationParams,
-  ExecutorDetails,
-  KernelExecutorConfig,
-  ConsoleExecutorConfig,
-  GenerateExecutableTypedDataParams,
-  ConsoleExecutorPayload,
+  VendorCancelAutomationParams,
   WorkflowStateResponse,
-  GeneratePayload,
-  GenerateCalldataResponse,
-  SendParams,
-  ActionNameToId,
-  SwapParams,
-  SwapQuoteRoutes,
-  GetBridgingRoutes,
-  GetRoutingResponse,
-  GetBridgingStatus,
-  BridgeParams,
 } from "./types";
 import {
-  AutomationLogResponse,
-  AutomationSubscription,
-} from "../AutomationContextFetcher/types";
+  GenerateCalldataResponse,
+  GeneratePayload,
+} from "../CoreActions/types";
+import routes from "@/routes";
 
-const routes = {
-  fetchExistingAccounts: "/user/consoles",
-  generateCalldata: "/builder/generate",
-  fetchAutomationSubscriptions: "/automations/subscriptions/console",
-  fetchAutomationLogs: "/kernel/logs",
-  indexTransaction: "/indexer/process",
-  kernelTasks: "/kernel/tasks",
-  kernelExecutor: "/kernel/executor",
-  automationsExecutor: "/automations/executor",
-  executorNonce: "/automations/executor/nonce",
-  workflowStatus: "/kernel/tasks/status",
-
-  // swap
-  swapRoutes: "/builder/swap/routes",
-
-  // bridge
-  fetchBridgingRoutes: "/builder/bridge/routes",
-  fetchBridgingStatus: "/builder/bridge/status",
-};
-
-export class VendorCaller {
+export class AutomationContext {
   private readonly axiosInstance: AxiosInstance;
 
   constructor(apiKey: string, baseURL: string) {
@@ -61,27 +34,6 @@ export class VendorCaller {
         "x-api-key": apiKey,
       },
     });
-  }
-
-  async fetchExistingAccounts(eoa: Address): Promise<Account[]> {
-    try {
-      if (!eoa) {
-        throw new Error("EOA (Externally Owned Account) is required");
-      }
-
-      const response = await this.axiosInstance.get<{ data: Account[] }>(
-        `${routes.fetchExistingAccounts}/${eoa}`
-      );
-
-      if (!response.data.data) {
-        throw new Error("No accounts found for the given EOA");
-      }
-
-      return response.data.data;
-    } catch (err: any) {
-      console.error(`Error fetching existing accounts: ${err.message}`);
-      return [];
-    }
   }
 
   async subscribeToAutomation(
@@ -190,26 +142,6 @@ export class VendorCaller {
     } catch (err: any) {
       console.error(`Error fetching automation logs: ${err.message}`);
       return [];
-    }
-  }
-
-  async indexTransaction(
-    transactionHash: string,
-    chainID: number
-  ): Promise<void> {
-    try {
-      const response = await this.axiosInstance.post(
-        `${routes.indexTransaction}/${transactionHash}/${chainID}`
-      );
-
-      if (response.status !== 204) {
-        throw new Error("Failed to index transaction");
-      }
-
-      console.log("Transaction indexed successfully");
-    } catch (err: any) {
-      console.error(`Error indexing transaction: ${err.message}`);
-      throw err;
     }
   }
 
@@ -487,178 +419,6 @@ export class VendorCaller {
       return response.data.data;
     } catch (err: any) {
       console.error(`Error fetching workflow state: ${err.message}`);
-      throw err;
-    }
-  }
-
-  async send(
-    chainId: number,
-    accountAddress: Address,
-    params: SendParams
-  ): Promise<GenerateCalldataResponse> {
-    try {
-      const response = await this.axiosInstance.post<GenerateCalldataResponse>(
-        routes.generateCalldata,
-        {
-          id: "ID",
-          action: "BUILD",
-          params: {
-            id: ActionNameToId.send,
-            chainId: chainId,
-            consoleAddress: accountAddress,
-            params,
-          },
-        } as GeneratePayload<SendParams, "BUILD">
-      );
-
-      return response.data;
-    } catch (err: any) {
-      console.error(`Error generating calldata: ${err.message}`);
-      throw err;
-    }
-  }
-
-  async swap(
-    chainId: number,
-    accountAddress: Address,
-    params: SwapParams
-  ): Promise<GenerateCalldataResponse> {
-    try {
-      const response = await this.axiosInstance.post<GenerateCalldataResponse>(
-        routes.generateCalldata,
-        {
-          id: "ID",
-          action: "BUILD",
-          params: {
-            id: ActionNameToId.swap,
-            chainId: chainId,
-            consoleAddress: accountAddress,
-            params,
-          },
-        } as GeneratePayload<SwapParams, "BUILD">
-      );
-
-      return response.data;
-    } catch (err: any) {
-      console.error(`Error generating calldata: ${err.message}`);
-      throw err;
-    }
-  }
-
-  async getSwapRoutes(
-    fromAssetAddress: Address,
-    toAssetAddress: Address,
-    ownerAddress: Address,
-    fromAmount: string,
-    slippage: string,
-    chainId: number
-  ): Promise<SwapQuoteRoutes> {
-    const requestData = {
-      chainId,
-      fromAssetAddress,
-      toAssetAddress,
-      ownerAddress,
-      fromAmount,
-      slippage,
-    };
-
-    try {
-      const params = new URLSearchParams();
-      Object.entries(requestData).forEach(([key, value]) => {
-        if (Array.isArray(value)) {
-          value.forEach((v) => params.append(key, v));
-        } else {
-          params.set(key, value.toString());
-        }
-      });
-      const queryString = params.toString();
-
-      const response = await this.axiosInstance.get<SwapQuoteRoutes["data"]>(
-        `${routes.swapRoutes}?${queryString}`
-      );
-
-      return { data: response.data, error: undefined };
-    } catch (err: any) {
-      const error = err as AxiosError<{ message: string }>;
-
-      return {
-        data: [],
-        error: error.response?.data?.message ?? error.message,
-      };
-    }
-  }
-
-  async fetchBridgingRoutes(
-    params: GetBridgingRoutes
-  ): Promise<GetRoutingResponse> {
-    try {
-      const query = new URLSearchParams({
-        chainIdIn: params.chainIdIn.toString(),
-        chainIdOut: params.chainIdOut.toString(),
-        tokenIn: params.tokenIn,
-        tokenOut: params.tokenOut,
-        amountIn: params.amountIn.toString(),
-        amountOut: params.amountOut.toString(),
-        slippage: params.slippage.toString(),
-        ownerAddress: params.ownerAddress,
-        recipient: params.recipient,
-      }).toString();
-
-      const url = `${routes.fetchBridgingRoutes}?${query}`;
-      const response = await this.axiosInstance.get<GetRoutingResponse>(url);
-      return response.data || [];
-    } catch (err: any) {
-      console.error(`Error fetching bridging routes: ${err.message}`);
-      return [];
-    }
-  }
-
-  async fetchBridgingStatus(
-    txnHash: Address,
-    pid: number,
-    fromChainId: number,
-    toChainId: number
-  ): Promise<GetBridgingStatus | null> {
-    try {
-      const queryParams = new URLSearchParams({
-        pid: pid.toString(),
-        transactionHash: txnHash,
-        fromChainId: fromChainId.toString(),
-        toChainId: toChainId.toString(),
-      });
-
-      const response = await this.axiosInstance.get<GetBridgingStatus>(
-        `${routes.fetchBridgingStatus}?${queryParams.toString()}`
-      );
-      return response.data;
-    } catch (err: any) {
-      return null;
-    }
-  }
-
-  async bridge(
-    chainId: number,
-    accountAddress: Address,
-    params: BridgeParams
-  ): Promise<GenerateCalldataResponse> {
-    try {
-      const response = await this.axiosInstance.post<GenerateCalldataResponse>(
-        routes.generateCalldata,
-        {
-          id: "ID",
-          action: "BUILD",
-          params: {
-            id: ActionNameToId.bridging,
-            chainId: chainId,
-            consoleAddress: accountAddress,
-            params,
-          },
-        } as GeneratePayload<BridgeParams, "BUILD">
-      );
-
-      return response.data;
-    } catch (err: any) {
-      console.error(`Error generating calldata: ${err.message}`);
       throw err;
     }
   }
