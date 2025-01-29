@@ -2,7 +2,7 @@ import {
   InterfaceCommunicator,
   AutomationContext,
   PublicDeployer,
-  CoreActions
+  CoreActions,
 } from "./helpers";
 import { Address, Communicator, Methods, UserClientFactory } from "./types";
 import { ADDRESSES, AddressRegistry, ConsoleContractNames } from "./constants";
