@@ -24,7 +24,7 @@ yarn add brahma-console-kit
 
 ### ConsoleKit
 
-`ConsoleKit` is the main class that provides access to the core functionalities of the SDK. It requires an API key and a base URL for initialization.
+[`ConsoleKit`](./src/kit.ts) is the main class that provides access to the core functionalities of the SDK. It requires an API key and a base URL for initialization.
 
 **Example:**
 
@@ -39,7 +39,7 @@ const consoleKit = new ConsoleKit(apiKey, baseURL);
 
 ### CoreActions
 
-`CoreActions` provides methods to interact with blockchain networks, such as fetching accounts, sending tokens, and swapping assets.
+[`CoreActions`](./src/helpers/CoreActions/index.ts) provides methods to interact with blockchain networks, such as fetching accounts, sending tokens, and swapping assets.
 
 **Example:**
 
@@ -54,7 +54,7 @@ async function fetchAccounts(eoa: string) {
 
 ### PublicDeployer
 
-`PublicDeployer` handles the deployment of public strategies and automation sub-accounts.
+[`PublicDeployer`](./src/helpers/PublicDeployer/index.ts) handles the deployment of public strategies and automation sub-accounts.
 
 **Example:**
 
@@ -77,7 +77,7 @@ async function deployStrategy(
 
 ### BuilderCaller
 
-`BuilderCaller` is used to add transactions and automations to the transaction builder.
+[`BuilderCaller`](./src/helpers/BuilderCaller/index.ts) is used to add transactions and automations to the transaction builder.
 
 **Example:**
 
@@ -92,7 +92,7 @@ async function addTransaction(params: any, automationName: string) {
 
 ### AutomationContext
 
-`AutomationContext` manages automation services, including subscribing, updating, and canceling automations.
+[`AutomationContext`](./src/helpers/AutomationContext/index.ts) manages automation services, including subscribing, updating, and canceling automations.
 
 **Example:**
 
