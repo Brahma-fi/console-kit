@@ -4,7 +4,7 @@ Console Kit is an SDK for building autonomous DeFi agents while providing progra
 
 The SDK abstracts away the underlying complexity of sub-accounts, policy management, and transaction execution, allowing developers to focus on building powerful autonomous strategies while inheriting Console's security features.
 
-### [System Architecture & Core Concepts](./docs/introduction.md)
+## [System Architecture & Core Concepts](./docs/introduction.md)
 
 ## Installation
 
@@ -21,3 +21,92 @@ yarn add brahma-console-kit
 ```
 
 ## Overview
+
+### ConsoleKit
+
+`ConsoleKit` is the main class that provides access to the core functionalities of the SDK. It requires an API key and a base URL for initialization.
+
+**Example:**
+
+```typescript
+import ConsoleKit from "brahma-console-kit";
+
+const apiKey = "your-api-key";
+const baseURL = "https://api.consolekit.com";
+
+const consoleKit = new ConsoleKit(apiKey, baseURL);
+```
+
+### CoreActions
+
+`CoreActions` provides methods to interact with blockchain networks, such as fetching accounts, sending tokens, and swapping assets.
+
+**Example:**
+
+```typescript
+const coreActions = consoleKit.coreActions;
+
+async function fetchAccounts(eoa: string) {
+  const accounts = await coreActions.fetchExistingAccounts(eoa);
+  console.log(accounts);
+}
+```
+
+### PublicDeployer
+
+`PublicDeployer` handles the deployment of public strategies and automation sub-accounts.
+
+**Example:**
+
+```typescript
+const publicDeployer = consoleKit.publicDeployer;
+
+async function deployStrategy(
+  owner: string,
+  chainId: number,
+  feeToken: string
+) {
+  const preComputeData = await publicDeployer.fetchPreComputeData(
+    owner,
+    chainId,
+    feeToken
+  );
+  console.log(preComputeData);
+}
+```
+
+### BuilderCaller
+
+`BuilderCaller` is used to add transactions and automations to the transaction builder.
+
+**Example:**
+
+```typescript
+const builderCaller = consoleKit.builderCaller;
+
+async function addTransaction(params: any, automationName: string) {
+  await builderCaller.addToTxnBuilder(params, automationName);
+  console.log("Transaction added to builder");
+}
+```
+
+### AutomationContext
+
+`AutomationContext` manages automation services, including subscribing, updating, and canceling automations.
+
+**Example:**
+
+```typescript
+const automationContext = consoleKit.automationContext;
+
+async function subscribeToAutomation(params: any) {
+  const response = await automationContext.subscribeToAutomation(params);
+  console.log(response);
+}
+```
+
+This overview provides a basic understanding of how to initialize and use the main classes in the `ConsoleKit` SDK. For more detailed usage, refer to the documentation or explore the source code.
+
+## License
+
+This project is licensed under the MIT License.

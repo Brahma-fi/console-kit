@@ -11,7 +11,7 @@ import {
 
 const routes = {
   // Public Deployer Routes
-  fetchPreComputeAddress: "/deployer/public-strategy/precompute",
+  fetchPreComputeData: "/deployer/public-strategy/precompute",
   fetchDeployerSignature: "/deployer/public-strategy/signature",
   deployPublicStrategy: "/deployer/public-strategy/deploy",
   fetchTaskStatus: "/relayer/tasks/status",
@@ -36,7 +36,7 @@ export class PublicDeployer {
    * @param {Address} feeToken - The address of the fee token.
    * @returns {Promise<PreComputedAddressData | null>} The precomputed address data or null if an error occurs.
    */
-  async fetchPreComputeAddress(
+  async fetchPreComputeData(
     owner: Address,
     chainId: number,
     feeToken: Address
@@ -45,7 +45,7 @@ export class PublicDeployer {
 
     try {
       const response = await this.axiosInstance.post(
-        routes.fetchPreComputeAddress,
+        routes.fetchPreComputeData,
         payload
       );
       return response.data.data;
