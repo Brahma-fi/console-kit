@@ -46,7 +46,7 @@ The user then interprets this policy intent and creates a final policy with thei
 }
 ```
 
-This final policy states that the executor can move 100 USDC (100000000) every 3600 seconds to the destinationAddress. Using these combinations, a very fine-grained policy is set which allows a guarded execution environment. Any action outside of this policy or which is not defined in the policy is blocked.
+This final policy states that the executor can move 100 USDC (100e6) every 3600 seconds to the destinationAddress. Using these combinations, a very fine-grained policy is set which allows a guarded execution environment. Any action outside of this policy or which is not defined in the policy is blocked.
 
 Console Kit abstracts all this complexity and provides simple interfaces to handle executor registration and policy management. Developers can easily set up executors and define policies without dealing with the underlying implementation details.
 

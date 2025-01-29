@@ -4,7 +4,7 @@ Console Kit is an SDK for building autonomous DeFi agents while providing progra
 
 The SDK abstracts away the underlying complexity of sub-accounts, policy management, and transaction execution, allowing developers to focus on building powerful autonomous strategies while inheriting Console's security features.
 
-### [Architecture Overview and Components](./docs/introduction.md)
+### [System Architecture & Core Concepts](./docs/introduction.md)
 
 ## Installation
 
