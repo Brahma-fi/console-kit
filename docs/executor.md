@@ -33,7 +33,7 @@ Consider an executor which is an automated token transfer bot that transfers USD
 
 ```
 hopAddresses: [destinationAddress]
-inputTokens: [USDC]
+inputTokens: [UsdcAddress]
 limitPerExecution: false
 ```
 
@@ -41,52 +41,22 @@ The user then interprets this policy intent and creates a final policy with thei
 
 ```
 {
-    tokenLimits: { USDC: 100 },
+    tokenLimits: { UsdcAddress: 100 },
     duration: 3600  // hour in seconds
 }
 ```
 
-This final policy states that the executor can move 100 USDC every 3600 seconds to the destinationAddress. Using these combinations, a very fine-grained policy is set which allows a guarded execution environment. Any action outside of this policy or which is not defined in the policy is blocked.
+This final policy states that the executor can move 100 USDC (100000000) every 3600 seconds to the destinationAddress. Using these combinations, a very fine-grained policy is set which allows a guarded execution environment. Any action outside of this policy or which is not defined in the policy is blocked.
 
 Console Kit abstracts all this complexity and provides simple interfaces to handle executor registration and policy management. Developers can easily set up executors and define policies without dealing with the underlying implementation details.
 
+### Implementation
+
+Console Kit simplifies executor registration and policy management through intuitive interfaces. Developers can implement these features without dealing with complex underlying mechanics.
+
+For implementation details, refer to this [sample executor registration script](https://github.com/Brahma-fi/scaffold-agent/blob/main/kernel-workflow/src/register-executor.ts).
+Upon registration, each executor receives a unique registryID (UUID) used for identification across Console Kit.
+
 ![Register Executor](./img/register_executor.png)
-
-```ts
-const ExecutorConfigConsole: ConsoleExecutorConfig = {
-  clientId: "<unique-id-fo-your-executor>",
-  executor: "<executors-public-address>",
-  hopAddresses: [],
-  inputTokens: [],
-  limitPerExecution: true,
-  timestamp: new Date().getTime()
-};
-
-    await _consoleKit.vendorCaller.generateConsoleExecutorRegistration712Message(
-      _chainId,
-      _executorConfig
-    );
-  const executorRegistrationSignature = await _wallet.signTypedData(
-    domain,
-    types,
-    message
-  );
-  console.log("[executor-console-sig]", executorRegistrationSignature);
-
-  try {
-    const executorData =
-      await _consoleKit.vendorCaller.registerExecutorOnConsole(
-        executorRegistrationSignature,
-        _chainId,
-        _executorConfig,
-        _executorMetadata.name,
-        _executorMetadata.logo,
-        _executorMetadata.metadata
-      );
-
-console.log("[executor-reg]", { executorData });
-```
-
-Once the executor is set, it is assigned a registryID (UUID) which is used to refer to the executor across the Console Kit.
 
 ### [← Introduction](./introduction.md) | [Understanding Subscriptions →](./subscriptions.md)
