@@ -14,7 +14,7 @@ import {
   GetBridgingStatus,
   SendParams,
   SwapParams,
-  SwapQuoteRoutes,
+  SwapQuoteRoute,
 } from "./types";
 
 export class CoreActions {
@@ -29,7 +29,13 @@ export class CoreActions {
     });
   }
 
-  // Get Existing Accounts of users
+  /**
+   * Fetches existing accounts associated with a given Externally Owned Account (EOA).
+   *
+   * @param {Address} eoa - The address of EOA to fetch Accounts for.
+   * @returns {Promise<Account[]>} A promise that resolves to an array of Accounts.
+   * @throws Will return an empty array if no accounts are found or if an error occurs during the fetch.
+   */
   async fetchExistingAccounts(eoa: Address): Promise<Account[]> {
     try {
       if (!eoa) {
@@ -51,7 +57,15 @@ export class CoreActions {
     }
   }
 
-  // Send action
+  /**
+   * Initiates a send action to generate calldata for transferring tokens on a blockchain network.
+   *
+   * @param {number} chainId - The ID of the blockchain network.
+   * @param {Address} accountAddress - The address of the account sending the tokens.
+   * @param {SendParams} params - The parameters for the send action, including recipient and token details.
+   * @returns {Promise<GenerateCalldataResponse>} A promise that resolves to a GenerateCalldataResponse object containing the transaction data.
+   * @throws Will throw an error if the calldata generation fails.
+   */
   async send(
     chainId: number,
     accountAddress: Address,
@@ -79,7 +93,15 @@ export class CoreActions {
     }
   }
 
-  // Swap action
+  /**
+   * Initiates a swap action to generate calldata for swapping assets on a blockchain network.
+   *
+   * @param {number} chainId - The ID of the blockchain network.
+   * @param {Address} accountAddress - The address of the account performing the swap.
+   * @param {SwapParams} params - The parameters for the swap action.
+   * @returns {Promise<GenerateCalldataResponse>} A promise that resolves to a GenerateCalldataResponse object containing the transaction data.
+   * @throws Will throw an error if the calldata generation fails.
+   */
   async swap(
     chainId: number,
     accountAddress: Address,
@@ -107,6 +129,18 @@ export class CoreActions {
     }
   }
 
+  /**
+   * Fetches swap routes for a given asset pair and amount.
+   *
+   * @param {Address} fromAssetAddress - The address of the asset to swap from.
+   * @param {Address} toAssetAddress - The address of the asset to swap to.
+   * @param {Address} ownerAddress - The address of the owner initiating the swap.
+   * @param {string} fromAmount - The amount of the asset to swap from.
+   * @param {string} slippage - The acceptable slippage percentage for the swap.
+   * @param {number} chainId - The ID of the blockchain network.
+   * @returns {Promise<{ data: SwapQuoteRoute[]; error?: string }>} A promise that resolves to an object containing the swap routes data or an error message.
+   * @throws Will return an error message if the request fails.
+   */
   async getSwapRoutes(
     fromAssetAddress: Address,
     toAssetAddress: Address,
@@ -114,7 +148,7 @@ export class CoreActions {
     fromAmount: string,
     slippage: string,
     chainId: number
-  ): Promise<SwapQuoteRoutes> {
+  ): Promise<{ data: SwapQuoteRoute[]; error?: string }> {
     const requestData = {
       chainId,
       fromAssetAddress,
@@ -135,7 +169,7 @@ export class CoreActions {
       });
       const queryString = params.toString();
 
-      const response = await this.axiosInstance.get<SwapQuoteRoutes["data"]>(
+      const response = await this.axiosInstance.get<SwapQuoteRoute[]>(
         `${routes.swapRoutes}?${queryString}`
       );
 
@@ -150,7 +184,15 @@ export class CoreActions {
     }
   }
 
-  // Bridge action
+  /**
+   * Initiates a bridge action to generate calldata for bridging assets between blockchain networks.
+   *
+   * @param {number} chainId - The ID of the blockchain network.
+   * @param {Address} accountAddress - The address of the account performing the bridge.
+   * @param {BridgeParams} params - The parameters for the bridge action.
+   * @returns {Promise<GenerateCalldataResponse>} A promise that resolves to a GenerateCalldataResponse object containing the transaction data.
+   * @throws Will throw an error if the calldata generation fails.
+   */
   async bridge(
     chainId: number,
     accountAddress: Address,
@@ -178,6 +220,11 @@ export class CoreActions {
     }
   }
 
+  /**
+   * Fetches bridging routes based on the specified parameters.
+   * @param {GetBridgingRoutesParams} params - The parameters for fetching bridging routes.
+   * @returns {Promise<BridgeRoute[]>} A promise that resolves to an array of BridgeRoute objects.
+   */
   async fetchBridgingRoutes(
     params: GetBridgingRoutesParams
   ): Promise<BridgeRoute[]> {
@@ -203,6 +250,14 @@ export class CoreActions {
     }
   }
 
+  /**
+   * Fetches the status of a bridging transaction.
+   * @param {Address} txnHash - The transaction hash.
+   * @param {number} pid - The process ID.
+   * @param {number} fromChainId - The ID of the source blockchain network.
+   * @param {number} toChainId - The ID of the destination blockchain network.
+   * @returns {Promise<GetBridgingStatus | null>} A promise that resolves to a GetBridgingStatus object or null.
+   */
   async fetchBridgingStatus(
     txnHash: Address,
     pid: number,
@@ -226,7 +281,12 @@ export class CoreActions {
     }
   }
 
-  // Indexing txn
+  /**
+   * Indexes a transaction on the blockchain.
+   * @param {string} transactionHash - The hash of the transaction to index.
+   * @param {number} chainID - The ID of the blockchain network.
+   * @returns {Promise<void>} A promise that resolves when the transaction is indexed.
+   */
   async indexTransaction(
     transactionHash: string,
     chainID: number
