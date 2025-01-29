@@ -5,10 +5,9 @@ import {
   CoreActions
 } from "./helpers";
 import { Address, Communicator, Methods, UserClientFactory } from "./types";
-import { ADDRESSES, AddressRegistry } from "./constants";
+import { ADDRESSES, AddressRegistry, ConsoleContractNames } from "./constants";
 
 export default class ConsoleKit {
-  public readonly addressRegistry: AddressRegistry;
   public readonly automationContext: AutomationContext;
   public readonly publicDeployer: PublicDeployer;
   public readonly coreActions: CoreActions;
@@ -16,6 +15,7 @@ export default class ConsoleKit {
   private readonly communicator: Communicator;
   private readonly apiKey: string;
   private readonly baseURL: string;
+  private readonly addressRegistry: AddressRegistry;
 
   constructor(apiKey: string, baseURL: string) {
     this.validateInputs(apiKey, baseURL);
@@ -41,6 +41,10 @@ export default class ConsoleKit {
 
   private determineAddressRegistry(baseURL: string): AddressRegistry {
     return baseURL.includes("dev") ? ADDRESSES.DEV : ADDRESSES.PROD;
+  }
+
+  getContractAddress(contractName: ConsoleContractNames): Address {
+    return this.addressRegistry[contractName];
   }
 
   async getClientFactory(): Promise<UserClientFactory> {

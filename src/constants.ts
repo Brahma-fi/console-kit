@@ -22,3 +22,6 @@ export const ADDRESSES = {
 
 export type AddressRegistry = Record<string, Address>;
 export type AddressMetaRegistry = Record<string, AddressRegistry>;
+export type ConsoleContractNames =
+  | keyof typeof ADDRESSES.DEV
+  | keyof typeof ADDRESSES.PROD;
