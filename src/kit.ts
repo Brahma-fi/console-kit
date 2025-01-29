@@ -2,13 +2,13 @@ import {
   InterfaceCommunicator,
   AutomationContext,
   PublicDeployer,
-  CoreActions,
+  CoreActions
 } from "./helpers";
 import { Address, Communicator, Methods, UserClientFactory } from "./types";
-import { ADDRESSES } from "./constants";
+import { ADDRESSES, AddressRegistry } from "./constants";
 
 export default class ConsoleKit {
-  public readonly executorPlugin: Address;
+  public readonly addressRegistry: AddressRegistry;
   public readonly automationContext: AutomationContext;
   public readonly publicDeployer: PublicDeployer;
   public readonly coreActions: CoreActions;
@@ -22,7 +22,7 @@ export default class ConsoleKit {
 
     this.apiKey = apiKey;
     this.baseURL = baseURL;
-    this.executorPlugin = this.determineExecutorPlugin(baseURL);
+    this.addressRegistry = this.determineAddressRegistry(baseURL);
 
     this.communicator = new InterfaceCommunicator();
     this.publicDeployer = new PublicDeployer(this.apiKey, this.baseURL);
@@ -39,10 +39,8 @@ export default class ConsoleKit {
     }
   }
 
-  private determineExecutorPlugin(baseURL: string): Address {
-    return baseURL.includes("dev")
-      ? ADDRESSES.EXECUTOR_PLUGIN.DEV
-      : ADDRESSES.EXECUTOR_PLUGIN.PROD;
+  private determineAddressRegistry(baseURL: string): AddressRegistry {
+    return baseURL.includes("dev") ? ADDRESSES.DEV : ADDRESSES.PROD;
   }
 
   async getClientFactory(): Promise<UserClientFactory> {
