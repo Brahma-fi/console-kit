@@ -1,14 +1,17 @@
 import axios, { AxiosInstance } from "axios";
-import { Address } from "viem";
+import { Address, zeroAddress } from "viem";
 
 import {
   AutomationLogResponse,
   AutomationSubscription,
   ConsoleExecutorConfig,
   ConsoleExecutorPayload,
+  ConsoleExecutorRegistration712Message,
+  ExecutableDigest712Message,
   ExecutorDetails,
   GenerateExecutableTypedDataParams,
   KernelExecutorConfig,
+  KernelExecutorRegistration712Message,
   SubmitTaskRequest,
   SubmitTaskResponse,
   SubscribeAutomationParams,
@@ -36,6 +39,13 @@ export class AutomationContext {
     });
   }
 
+  /**
+   * Subscribes to an automation service by generating the necessary calldata.
+   *
+   * @param {SubscribeAutomationParams} params - The parameters required to subscribe to the automation service.
+   * @returns {Promise<GenerateCalldataResponse>} A promise that resolves to a GenerateCalldataResponse object containing the transaction data.
+   * @throws Will throw an error if the subscription process fails.
+   */
   async subscribeToAutomation(
     params: SubscribeAutomationParams
   ): Promise<GenerateCalldataResponse> {
@@ -56,6 +66,13 @@ export class AutomationContext {
     }
   }
 
+  /**
+   * Updates an existing automation service by generating the necessary calldata.
+   *
+   * @param {UpdateAutomationParams} params - The parameters required to update the automation service.
+   * @returns {Promise<GenerateCalldataResponse>} A promise that resolves to a GenerateCalldataResponse object containing the transaction data.
+   * @throws Will throw an error if the update process fails.
+   */
   async updateAutomation(
     params: UpdateAutomationParams
   ): Promise<GenerateCalldataResponse> {
@@ -76,6 +93,13 @@ export class AutomationContext {
     }
   }
 
+  /**
+   * Cancels an existing automation service by generating the necessary calldata.
+   *
+   * @param {VendorCancelAutomationParams} params - The parameters required to cancel the automation service.
+   * @returns {Promise<GenerateCalldataResponse>} A promise that resolves to a GenerateCalldataResponse object containing the transaction data.
+   * @throws Will throw an error if the cancellation process fails.
+   */
   async cancelAutomation(
     params: VendorCancelAutomationParams
   ): Promise<GenerateCalldataResponse> {
@@ -96,6 +120,14 @@ export class AutomationContext {
     }
   }
 
+  /**
+   * Fetches automation subscriptions associated with a given account address and blockchain network.
+   *
+   * @param {Address} accountAddress - The address of the account to fetch subscriptions for.
+   * @param {number} chainId - The ID of the blockchain network.
+   * @returns {Promise<AutomationSubscription[]>} A promise that resolves to an array of AutomationSubscription objects.
+   * @throws Will return an empty array if no subscriptions are found or if an error occurs during the fetch.
+   */
   async fetchAutomationSubscriptions(
     accountAddress: Address,
     chainId: number
@@ -122,6 +154,13 @@ export class AutomationContext {
     }
   }
 
+  /**
+   * Fetches logs for a specific automation using its ID.
+   *
+   * @param {string} automationId - The unique identifier of the automation to fetch logs for.
+   * @returns {Promise<AutomationLogResponse[]>} A promise that resolves to an array of AutomationLogResponse objects.
+   * @throws Will return an empty array if no logs are found or if an error occurs during the fetch.
+   */
   async fetchAutomationLogs(
     automationId: string
   ): Promise<AutomationLogResponse[]> {
@@ -145,6 +184,15 @@ export class AutomationContext {
     }
   }
 
+  /**
+   * Fetches tasks associated with a given registry ID.
+   *
+   * @param {string} registryId - The unique identifier of the registry to fetch tasks for.
+   * @param {number} [cursor=0] - The cursor for pagination, default is 0.
+   * @param {number} [limit=1] - The maximum number of tasks to fetch, default is 1.
+   * @returns {Promise<Task[]>} A promise that resolves to an array of Tasks.
+   * @throws Will return an empty array if no tasks are found or if an error occurs during the fetch.
+   */
   async fetchTasks(
     registryId: string,
     cursor: number = 0,
@@ -169,6 +217,13 @@ export class AutomationContext {
     }
   }
 
+  /**
+   * Submits a task request to the automation system.
+   *
+   * @param {SubmitTaskRequest} taskRequest - The request object containing task details to be submitted.
+   * @returns {Promise<SubmitTaskResponse>} A promise that resolves to the response indicating the success or failure of the task submission.
+   * @throws Will return an error message if the task submission fails.
+   */
   async submitTask(
     taskRequest: SubmitTaskRequest
   ): Promise<SubmitTaskResponse> {
@@ -189,6 +244,13 @@ export class AutomationContext {
     }
   }
 
+  /**
+   * Fetches the details of an executor associated with a given registry ID.
+   *
+   * @param {string} registryId - The unique identifier of the registry to fetch executor details for.
+   * @returns {Promise<ExecutorDetails>} A promise that resolves to the executor details.
+   * @throws Will throw an error if the registry ID is not provided or if the executor details cannot be retrieved.
+   */
   async fetchExecutorDetails(registryId: string): Promise<ExecutorDetails> {
     try {
       if (!registryId) {
@@ -210,11 +272,19 @@ export class AutomationContext {
     }
   }
 
+  /**
+   * Generates a structured data message for registering a kernel executor using EIP-712.
+   *
+   * @param {number} chainId - The ID of the blockchain network.
+   * @param {string} registryId - The registry ID for the executor.
+   * @param {KernelExecutorConfig} config - The configuration details for the kernel executor.
+   * @returns {KernelExecutorRegistration712Message} The EIP-712 structured data for registering the kernel executor.
+   */
   async generateKernelExecutorRegistration712Message(
     chainId: number,
     registryId: string,
     config: KernelExecutorConfig
-  ) {
+  ): Promise<KernelExecutorRegistration712Message> {
     return {
       types: {
         ModifyExecutor: [
@@ -236,6 +306,14 @@ export class AutomationContext {
     };
   }
 
+  /**
+   * Registers an executor on the kernel with the specified configuration.
+   *
+   * @param {string} registryId - The unique identifier of the registry where the executor will be registered.
+   * @param {string} signature - The signature required for registering the executor.
+   * @param {KernelExecutorConfig} config - The configuration details for the kernel executor.
+   * @throws Will throw an error if the registration fails.
+   */
   async registerExecutorOnKernel(
     registryId: string,
     signature: string,
@@ -260,10 +338,17 @@ export class AutomationContext {
     }
   }
 
+  /**
+   * Generates a structured data message for registering a console executor using EIP-712.
+   *
+   * @param {number} chainId - The ID of the blockchain network.
+   * @param {ConsoleExecutorConfig} config - The configuration details for the console executor.
+   * @returns {Object} An object containing the EIP-712 structured data for registering the executor.
+   */
   async generateConsoleExecutorRegistration712Message(
     chainId: number,
     config: ConsoleExecutorConfig
-  ) {
+  ): Promise<ConsoleExecutorRegistration712Message> {
     return {
       types: {
         RegisterExecutor: [
@@ -284,12 +369,24 @@ export class AutomationContext {
       message: {
         ...config,
         feeInBPS: 0,
-        feeToken: "0x0000000000000000000000000000000000000000",
+        feeToken: zeroAddress,
       },
       primaryType: "RegisterExecutor",
     };
   }
 
+  /**
+   * Registers an executor on the console with the specified configuration and metadata.
+   *
+   * @param {string} signature - The signature required for registering the executor.
+   * @param {number} chainId - The ID of the blockchain network.
+   * @param {ConsoleExecutorConfig} config - The configuration details for the console executor.
+   * @param {string} name - The name of the executor.
+   * @param {string} logo - The logo URL or identifier for the executor.
+   * @param {any} metadata - Additional metadata associated with the executor.
+   * @returns {Promise<(ConsoleExecutorPayload & { id: string; status: number }) | null>} A promise that resolves to the registered executor details, including ID and status, or null if registration fails.
+   * @throws Will throw an error if the registration fails.
+   */
   async registerExecutorOnConsole(
     signature: string,
     chainId: number,
@@ -303,7 +400,7 @@ export class AutomationContext {
         inputTokens: config.inputTokens,
         hopAddresses: config.hopAddresses,
         feeInBPS: 0,
-        feeToken: "0x0000000000000000000000000000000000000000",
+        feeToken: zeroAddress,
         feeReceiver: config.feeReceiver,
         limitPerExecution: config.limitPerExecution,
       },
@@ -333,9 +430,15 @@ export class AutomationContext {
     }
   }
 
+  /**
+   * Generates a structured data message for an executable digest using EIP-712.
+   *
+   * @param {GenerateExecutableTypedDataParams} params - The parameters required to generate the executable digest.
+   * @returns {Promise<ExecutableDigest712Message>} A promise that resolves to the EIP-712 structured data for the executable digest.
+   */
   async generateExecutableDigest712Message(
     params: GenerateExecutableTypedDataParams
-  ) {
+  ): Promise<ExecutableDigest712Message> {
     return {
       types: {
         ExecutionParams: [
@@ -368,8 +471,8 @@ export class AutomationContext {
         value: params.value,
         nonce: params.nonce,
         data: params.data,
-        gasToken: "0x0000000000000000000000000000000000000000", // Default value
-        refundReceiver: "0x0000000000000000000000000000000000000000", // Default value
+        gasToken: zeroAddress, // Default value
+        refundReceiver: zeroAddress, // Default value
         safeTxGas: "0", // Default value
         baseGas: "0", // Default value
         gasPrice: "0", // Default value
@@ -377,11 +480,20 @@ export class AutomationContext {
     };
   }
 
+  /**
+   * Fetches the nonce for a specific executor on a given automation account and blockchain network.
+   *
+   * @param {Address} automationAccount - The address of the automation account.
+   * @param {Address} executor - The address of the executor.
+   * @param {number} chainId - The ID of the blockchain network.
+   * @returns {Promise<string>} A promise that resolves to the nonce value for the executor.
+   * @throws Will throw an error if the parameters are invalid or if the nonce cannot be retrieved.
+   */
   async fetchExecutorNonce(
     automationAccount: Address,
     executor: Address,
     chainId: number
-  ) {
+  ): Promise<string> {
     try {
       if (!automationAccount || !executor || !chainId) {
         throw new Error("Invalid params to get executor nonce");
@@ -402,7 +514,14 @@ export class AutomationContext {
     }
   }
 
-  async fetchWorkflowState(taskId: string) {
+  /**
+   * Fetches the state of a workflow using its task ID.
+   *
+   * @param {string} taskId - The unique identifier of the task for which the workflow state is to be fetched.
+   * @returns {Promise<WorkflowStateResponse>} A promise that resolves to the workflow state response.
+   * @throws Will throw an error if the task ID is not provided or if the workflow state cannot be retrieved.
+   */
+  async fetchWorkflowState(taskId: string): Promise<WorkflowStateResponse> {
     try {
       if (!taskId || taskId === "") {
         throw new Error("TaskID is required to get workflow state");

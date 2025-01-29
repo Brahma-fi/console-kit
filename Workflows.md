@@ -1,5 +1,0 @@
-# Workflows
-Workflows are series of onchain interactions which are trigger or scheduled based. They provide good abstraction to the underlying blockchain interactions so devs can focuse on the highlevel operation logic while getting the benefits of reliable execution in pure non-custodial manner. Workflow's are built with `BuilderKit` as core component that uses the `Policy Engine` for validating actions, `Relayer` for gasfree fault tolerant transactions across multiple chains, `Indexer` for reacting based on onchian events. Dev's can use the public workflows to build and customise it to their own usecase. They can run these workflows either on their infra or hosted one from Brahma. 
-
-## Example 
-We will show a simple workflow that rebalances across morpho vault built on top of `BuilderKit` that uses `Policy Engine` for validating actions. You can find the full code [here](https://github.com/Brahma-fi/brahma-builder)
