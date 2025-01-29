@@ -13,7 +13,7 @@ export default class ConsoleKit {
   private readonly baseURL: string;
 
   public automationContext: AutomationContext;
-  public builderCaller: BuilderCaller;
+  // public builderCaller: BuilderCaller;
   public publicDeployer: PublicDeployer;
   public coreActions: CoreActions;
 
@@ -30,7 +30,7 @@ export default class ConsoleKit {
     this.baseURL = baseURL;
 
     this.communicator = new InterfaceCommunicator();
-    this.builderCaller = new BuilderCaller(this.communicator);
+    // this.builderCaller = new BuilderCaller(this.communicator);
     this.publicDeployer = new PublicDeployer(this.apiKey, this.baseURL);
     this.automationContext = new AutomationContext(this.apiKey, this.baseURL);
     this.coreActions = new CoreActions(this.apiKey, this.baseURL);

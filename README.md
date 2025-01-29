@@ -75,21 +75,6 @@ async function deployStrategy(
 }
 ```
 
-### BuilderCaller
-
-[`BuilderCaller`](./src/helpers/BuilderCaller/index.ts) is used to add transactions and automations to the transaction builder.
-
-**Example:**
-
-```typescript
-const builderCaller = consoleKit.builderCaller;
-
-async function addTransaction(params: any, automationName: string) {
-  await builderCaller.addToTxnBuilder(params, automationName);
-  console.log("Transaction added to builder");
-}
-```
-
 ### AutomationContext
 
 [`AutomationContext`](./src/helpers/AutomationContext/index.ts) manages automation services, including subscribing, updating, and canceling automations.
