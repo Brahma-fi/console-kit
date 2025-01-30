@@ -1,6 +1,6 @@
-## Core Features
+# Core Features
 
-### Native Console Actions
+## Native Console Actions
 
 - Programmatic access to Console's features including cross-chain swap routing, lending operations, and position management
 - Built-in interfaces for complex DeFi operations across supported chains and protocols

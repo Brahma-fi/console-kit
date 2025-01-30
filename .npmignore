@@ -1,0 +1,13 @@
+# Exclude test files
+tests/
+*.test.js
+
+# Exclude documentation
+docs/
+
+# Exclude configuration files
+*.config.js
+*.config.json
+
+# Exclude source maps if not needed
+*.map
