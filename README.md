@@ -4,7 +4,16 @@ Console Kit is an SDK for building autonomous DeFi agents while providing progra
 
 The SDK abstracts away the underlying complexity of sub-accounts, policy management, and transaction execution, allowing developers to focus on building powerful autonomous strategies while inheriting Console's security features.
 
-## [System Architecture & Core Concepts](./docs/introduction.md)
+## System Architecture & Core Concepts
+
+The [System Architecture & Core Concepts documentation](./docs/introduction.md) provides a comprehensive overview of Console Kit's design principles, components, and terminology. This section is essential reading for developers to understand:
+
+- Core architectural components and their interactions
+- Key terminologies and concepts used throughout the SDK
+- Security model and policy engine fundamentals
+- Integration patterns and best practices
+
+We recommend reviewing this documentation before starting development to ensure a solid foundation in Console Kit's principles.
 
 ## Installation
 
@@ -19,6 +28,12 @@ or
 ```sh
 yarn add brahma-console-kit
 ```
+
+## Getting Started with Template
+
+To quickly bootstrap your Console Kit project, you can use our [scaffold agent repository](https://github.com/Brahma-fi/scaffold-agent)
+
+The scaffold repository includes a collection of example implementations showcasing how to build autonomous DeFi agents using Console Kit. This repository demonstrates integration patterns ranging from LLM-powered execution to automated DeFi workflows.
 
 ## Overview
 
@@ -39,7 +54,7 @@ const consoleKit = new ConsoleKit(apiKey, baseURL);
 
 ### CoreActions
 
-[`CoreActions`](./src/helpers/CoreActions/index.ts) provides methods to interact with blockchain networks, such as fetching accounts, sending tokens, and swapping assets.
+[`CoreActions`](./src/helpers/CoreActions/index.ts) provides core DeFi functions such as sending tokens and swapping assets, as well as fetching user information.
 
 **Example:**
 
@@ -54,7 +69,7 @@ async function fetchAccounts(eoa: string) {
 
 ### PublicDeployer
 
-[`PublicDeployer`](./src/helpers/PublicDeployer/index.ts) handles the deployment of public strategies and automation sub-accounts.
+[`PublicDeployer`](./src/helpers/PublicDeployer/index.ts) handles executor subscription and brahma account deployments directly through EOAs in a gasless manner.
 
 **Example:**
 
@@ -77,7 +92,7 @@ async function deployStrategy(
 
 ### AutomationContext
 
-[`AutomationContext`](./src/helpers/AutomationContext/index.ts) manages automation services, including subscribing, updating, and canceling automations.
+[`AutomationContext`](./src/helpers/AutomationContext/index.ts) manages automation services, including subscribing to, updating, and canceling automated tasks.
 
 **Example:**
 
