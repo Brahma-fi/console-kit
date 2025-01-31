@@ -2,7 +2,7 @@
 
 # ConsoleKit
 
-ConsoleKit enables agents to execute complex DeFi transactions on-chain. Any agent with any model can now transact autonomously with institutional security.
+ConsoleKit enables agents to execute complex DeFi transactions on-chain. Any agent with any model can now transact autonomously with battle-tested security guardrails.
 
 - Manage user funds and execute complex operations at scale
 - Access modular functions for DeFi primitives: optimal routing, MEV protection, cross-chain liquidity
