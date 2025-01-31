@@ -42,9 +42,9 @@ Turn "Set a DCA strategy for 1000 USDC into ETH over 30 days with increased buys
 
 Check out these examples demonstrating how to interface ConsoleKit agents with popular AI frameworks like elizaOS, openAi SDK, and langChain:
 
-- elizaOS [Example →](https://github.com/Brahma-fi/scaffold-agent/tree/ft-addEliza)
-- openAi SDK [Example →](https://github.com/Brahma-fi/scaffold-agent/tree/ft-addOpenAi)
-- langChain [Example →](https://github.com/Brahma-fi/scaffold-agent/tree/ft-addLangchain)
+- [ElizaOS](https://github.com/Brahma-fi/scaffold-agent/tree/ft-addEliza)
+- [OpenAI SDK](https://github.com/Brahma-fi/scaffold-agent/tree/ft-addOpenAi)
+- [LangChain](https://github.com/Brahma-fi/scaffold-agent/tree/ft-addLangchain)
 
 ## System Architecture & Core Concepts
 
