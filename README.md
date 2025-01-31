@@ -1,8 +1,42 @@
 # Console Kit
 
-Console Kit is an SDK for building autonomous DeFi agents while providing programmatic access to Console's core DeFi utilities. The SDK enables developers to create sophisticated agents that can manage user funds and execute complex strategies, all secured by Console's policy engine and execution infrastructure. Essential DeFi primitives like optimal swap routing, MEV-protected execution, and cross-chain liquidity management are exposed as modular functions, enabling flexible integration paths from simple utility use to full autonomous agents.
+Console Kit is an SDK for building autonomous DeFi agents. The SDK enables developers to write complex on-chain interactions and use them via agents. These agents can manage user funds and execute complex operations, all secured by Console's policy engine and execution infrastructure. Essential DeFi primitives like optimal swap routing, MEV-protected execution, and cross-chain liquidity management are exposed as modular functions for developers to quickly build their own on-chain interactions. The SDK abstracts away the underlying complexity of sub-accounts, policy management, transaction execution, and RPC management, allowing developers to focus on building powerful autonomous agents while inheriting Console's security features.
 
-The SDK abstracts away the underlying complexity of sub-accounts, policy management, and transaction execution, allowing developers to focus on building powerful autonomous strategies while inheriting Console's security features.
+## What are Agents?
+
+At their core, agents are automated decision-makers that execute your on-chain interactions. They monitor conditions, execute transactions, and manage positions based on predefined logic. Here's what makes them powerful:
+
+- **Always-On Execution**: Your agent can continuously monitor markets and execute operations
+- **Programmable Logic**: Define sophisticated conditions and actions using Console Kit's DeFi primitives
+- **Built-in Safety**: Every agent inherits Console's policy engine, protecting user funds with customizable constraints
+
+### Making Agents Smarter
+
+While agents execute the strategies, you can enhance their decision-making by connecting them to external intelligence sources:
+
+- **Market Intelligence**: Connect to price oracles, sentiment analyzers, and trading signal providers
+- **On-Chain Analytics**: Integrate on-chain data providers for wallet behavior, protocol metrics, and liquidity analysis
+- **Custom AI Models**: Plug in your own trained models for specialized strategy execution
+
+These intelligence sources can be powered by AI models. For example, a DCA agent can be made smarter by:
+
+- Using sentiment analysis models to adjust buy amounts based on social media trends and news
+- Analyzing whale wallet movements to detect accumulation/distribution patterns
+- Learning from historical market behavior to optimize entry timing across different market conditions
+
+**Console Kit handles the secure execution** while you focus on integrating these intelligence systems.
+
+### Interfacing with Users
+
+DeFi agents often involve complex parameters and operations. Make them accessible through natural language interfaces so users can interact conversationally instead of setting technical parameters.
+
+Turn "Set a DCA strategy for 1000 USDC into ETH over 30 days with increased buys during high sentiment periods" into executable actions.
+
+Check out these examples demonstrating how to interface Console Kit agents with popular AI frameworks like elizaOS, openAi SDK, and langChain:
+
+- elizaOS [Example →](https://github.com/Brahma-fi/scaffold-agent/tree/ft-addEliza)
+- openAi SDK [Example →](https://github.com/Brahma-fi/scaffold-agent/tree/ft-addOpenAi)
+- langChain [Example →](https://github.com/Brahma-fi/scaffold-agent/tree/ft-addLangchain)
 
 ## System Architecture & Core Concepts
 
@@ -106,6 +140,14 @@ async function subscribeToAutomation(params: any) {
 ```
 
 This overview provides a basic understanding of how to initialize and use the main classes in the `ConsoleKit` SDK. For more detailed usage, refer to the documentation or explore the source code.
+
+## Brahma Accounts Security Audits
+
+Security audits performed on Brahma accounts. Please refer to the following reports for detailed security analysis and findings:
+
+- [Spearbit Audit Report](https://github.com/spearbit/portfolio/blob/master/pdfs/Brahma-Spearbit-Security-Review.pdf)
+- [Code4rena Audit Report](https://code4rena.com/audits/2023-10-brahma#top)
+- [Ackee Blockchain Audit Report](https://github.com/Ackee-Blockchain/public-audit-reports/blob/master/2023/ackee-blockchain-brahma-console-v2-report.pdf)
 
 ## License
 
