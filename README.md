@@ -1,13 +1,23 @@
-# Console Kit
+![cover](./docs/img/banner.png)
 
-Console Kit is an SDK for building autonomous DeFi agents. The SDK enables developers to write complex on-chain interactions and use them via agents. These agents can manage user funds and execute complex operations, all secured by Console's policy engine and execution infrastructure. Essential DeFi primitives like optimal swap routing, MEV-protected execution, and cross-chain liquidity management are exposed as modular functions for developers to quickly build their own on-chain interactions. The SDK abstracts away the underlying complexity of sub-accounts, policy management, transaction execution, and RPC management, allowing developers to focus on building powerful autonomous agents while inheriting Console's security features.
+# ConsoleKit
+
+ConsoleKit enables agents to execute complex DeFi transactions on-chain. Any agent with any model can now transact autonomously with battle-tested security guardrails.
+
+- Manage user funds and execute complex operations at scale
+- Access modular functions for DeFi primitives: optimal routing, MEV protection, cross-chain liquidity
+- Users keep full custody and delegate access to Agents
+- Deploy agents on any interface: your website, telegram, or custom frontend
+- Enable cross-chain interactions with same programmable account and execution capabilities
+- Prevent unauthorized transactions with on-chain policy enforcement
+- Skip the complexity: accounts, policies, execution, RPC management all handled
 
 ## What are Agents?
 
 At their core, agents are automated decision-makers that execute your on-chain interactions. They monitor conditions, execute transactions, and manage positions based on predefined logic. Here's what makes them powerful:
 
 - **Always-On Execution**: Your agent can continuously monitor markets and execute operations
-- **Programmable Logic**: Define sophisticated conditions and actions using Console Kit's DeFi primitives
+- **Programmable Logic**: Define sophisticated conditions and actions using ConsoleKit's DeFi primitives
 - **Built-in Safety**: Every agent inherits Console's policy engine, protecting user funds with customizable constraints
 
 ### Making Agents Smarter
@@ -24,7 +34,7 @@ These intelligence sources can be powered by AI models. For example, a DCA agent
 - Analyzing whale wallet movements to detect accumulation/distribution patterns
 - Learning from historical market behavior to optimize entry timing across different market conditions
 
-**Console Kit handles the secure execution** while you focus on integrating these intelligence systems.
+**ConsoleKit handles the secure execution** while you focus on integrating these intelligence systems.
 
 ### Interfacing with Users
 
@@ -32,22 +42,22 @@ DeFi agents often involve complex parameters and operations. Make them accessibl
 
 Turn "Set a DCA strategy for 1000 USDC into ETH over 30 days with increased buys during high sentiment periods" into executable actions.
 
-Check out these examples demonstrating how to interface Console Kit agents with popular AI frameworks like elizaOS, openAi SDK, and langChain:
+Check out these examples demonstrating how to interface ConsoleKit agents with popular AI frameworks like elizaOS, openAi SDK, and langChain:
 
-- elizaOS [Example →](https://github.com/Brahma-fi/scaffold-agent/tree/ft-addEliza)
-- openAi SDK [Example →](https://github.com/Brahma-fi/scaffold-agent/tree/ft-addOpenAi)
-- langChain [Example →](https://github.com/Brahma-fi/scaffold-agent/tree/ft-addLangchain)
+- [ElizaOS](https://github.com/Brahma-fi/scaffold-agent/tree/ft-addEliza)
+- [OpenAI SDK](https://github.com/Brahma-fi/scaffold-agent/tree/ft-addOpenAi)
+- [LangChain](https://github.com/Brahma-fi/scaffold-agent/tree/ft-addLangchain)
 
 ## System Architecture & Core Concepts
 
-The [System Architecture & Core Concepts documentation](./docs/introduction.md) provides a comprehensive overview of Console Kit's design principles, components, and terminology. This section is essential reading for developers to understand:
+The [System Architecture & Core Concepts documentation](./docs/introduction.md) provides a comprehensive overview of ConsoleKit's design principles, components, and terminology. This section is essential reading for developers to understand:
 
 - Core architectural components and their interactions
 - Key terminologies and concepts used throughout the SDK
 - Security model and policy engine fundamentals
 - Integration patterns and best practices
 
-We recommend reviewing this documentation before starting development to ensure a solid foundation in Console Kit's principles.
+We recommend reviewing this documentation before starting development to ensure a solid foundation in ConsoleKit's principles.
 
 ## Installation
 
@@ -65,9 +75,9 @@ yarn add brahma-console-kit
 
 ## Getting Started with Template
 
-To quickly bootstrap your Console Kit project, you can use our [scaffold agent repository](https://github.com/Brahma-fi/scaffold-agent)
+To quickly bootstrap your ConsoleKit project, you can use our [scaffold agent repository](https://github.com/Brahma-fi/scaffold-agent)
 
-The scaffold repository includes a collection of example implementations showcasing how to build autonomous DeFi agents using Console Kit. This repository demonstrates integration patterns ranging from LLM-powered execution to automated DeFi workflows.
+The scaffold repository includes a collection of example implementations showcasing how to build autonomous DeFi agents using ConsoleKit. This repository demonstrates integration patterns ranging from LLM-powered execution to automated DeFi workflows.
 
 ## Overview
 
