@@ -162,3 +162,6 @@ Security audits performed on Brahma accounts. Please refer to the following repo
 ## License
 
 This project is licensed under the MIT License.
+
+### Note
+Safe Agenthon api-key: `65832024-c1f4-48d2-81e6-3460f2722600` and url: `https://dev.console.fi/`
