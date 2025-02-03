@@ -13,8 +13,9 @@ import {
   GetBridgingRoutesParams,
   GetBridgingStatus,
   SendParams,
+  SolverParams,
   SwapParams,
-  SwapQuoteRoute,
+  SwapQuoteRoute
 } from "./types";
 
 export class CoreActions {
@@ -24,8 +25,8 @@ export class CoreActions {
     this.axiosInstance = axios.create({
       baseURL,
       headers: {
-        "x-api-key": apiKey,
-      },
+        "x-api-key": apiKey
+      }
     });
   }
 
@@ -81,8 +82,8 @@ export class CoreActions {
             id: ActionNameToId.send,
             chainId: chainId,
             consoleAddress: accountAddress,
-            params,
-          },
+            params
+          }
         } as GeneratePayload<SendParams, "BUILD">
       );
 
@@ -117,8 +118,8 @@ export class CoreActions {
             id: ActionNameToId.swap,
             chainId: chainId,
             consoleAddress: accountAddress,
-            params,
-          },
+            params
+          }
         } as GeneratePayload<SwapParams, "BUILD">
       );
 
@@ -155,7 +156,7 @@ export class CoreActions {
       toAssetAddress,
       ownerAddress,
       fromAmount,
-      slippage,
+      slippage
     };
 
     try {
@@ -179,7 +180,7 @@ export class CoreActions {
 
       return {
         data: [],
-        error: error.response?.data?.message ?? error.message,
+        error: error.response?.data?.message ?? error.message
       };
     }
   }
@@ -208,8 +209,8 @@ export class CoreActions {
             id: ActionNameToId.bridging,
             chainId: chainId,
             consoleAddress: accountAddress,
-            params,
-          },
+            params
+          }
         } as GeneratePayload<BridgeParams, "BUILD">
       );
 
@@ -238,7 +239,7 @@ export class CoreActions {
         amountOut: params.amountOut.toString(),
         slippage: params.slippage.toString(),
         ownerAddress: params.ownerAddress,
-        recipient: params.recipient,
+        recipient: params.recipient
       }).toString();
 
       const url = `${routes.fetchBridgingRoutes}?${query}`;
@@ -269,7 +270,7 @@ export class CoreActions {
         pid: pid.toString(),
         transactionHash: txnHash,
         fromChainId: fromChainId.toString(),
-        toChainId: toChainId.toString(),
+        toChainId: toChainId.toString()
       });
 
       const response = await this.axiosInstance.get<GetBridgingStatus>(
@@ -303,6 +304,43 @@ export class CoreActions {
       console.log("Transaction indexed successfully");
     } catch (err: any) {
       console.error(`Error indexing transaction: ${err.message}`);
+      throw err;
+    }
+  }
+
+  /**
+   * Initiates a bridge action to generate solver calldata for a transaction.
+   *
+   * @param {Address} accountAddress - The address of the account performing the transaction.
+   * @param {SolverParams} params - The parameters for the solver action.
+   * @returns {Promise<GenerateCalldataResponse>} A promise that resolves to a GenerateCalldataResponse object containing the transaction data.
+   * @throws Will throw an error if the calldata generation fails.
+   */
+  async solver(
+    accountAddress: Address,
+    params: SolverParams
+  ): Promise<GenerateCalldataResponse> {
+    try {
+      const response = await this.axiosInstance.post<GenerateCalldataResponse>(
+        routes.generateCalldata,
+        {
+          id: "INTENT",
+          action: "BUILD",
+          params: {
+            id: ActionNameToId.solver,
+            chainId: params.chainId,
+            consoleAddress: accountAddress,
+            params: {
+              ...params,
+              slippage: params.slippage * 1e2 // 4 basis points
+            }
+          }
+        } as GeneratePayload<SolverParams, "BUILD">
+      );
+
+      return response.data;
+    } catch (err: any) {
+      console.error(`Error generating calldata: ${err.message}`);
       throw err;
     }
   }

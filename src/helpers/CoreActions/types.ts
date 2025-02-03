@@ -21,6 +21,7 @@ export enum ActionNameToId {
   send = 301,
   swap = 309,
   bridging = 326,
+  solver = 248
 }
 
 export type GeneratePayload<T, A extends ActionType> = A extends "BUILD"
@@ -184,6 +185,28 @@ export type GetBridgingRoutesParams = {
   slippage: number;
   ownerAddress: string;
   recipient: Address;
+};
+
+/**
+ * Parameters required for get solver calldata.
+ *
+ * @interface GetBridgingRoutesParams
+ * @member {number} chainId - The ID of the input blockchain network.
+ * @member {string} inputToken - The address of the input token.
+ * @member {string} outputToken - The address of the output token.
+ * @member {string} userAddress - The address of the token owner.
+ * @member {Address} outputReceiver - The address of the recipient.
+ * @member {string} inputAmount - The amount of the input token.
+ * @member {number} slippage - The acceptable slippage percentage. ex. 3 for 3%
+ */
+export type SolverParams = {
+  chainId: number;
+  inputToken: Address;
+  outputToken: Address;
+  userAddress: Address;
+  outputReceiver: Address;
+  inputAmount: string;
+  slippage: number;
 };
 
 type Protocol = {
