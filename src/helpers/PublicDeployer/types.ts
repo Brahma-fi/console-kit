@@ -13,6 +13,7 @@ export type AutomationSubscriptionLimits = {
   duration: number;
   tokenInputs: Record<Address, string>;
   tokenLimits: Record<Address, string>;
+  whitelistedAddresses?: Address[];
 };
 
 /**
