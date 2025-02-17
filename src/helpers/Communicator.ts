@@ -28,22 +28,9 @@ class InterfaceCommunicator implements Communicator {
     return !emptyOrMalformed && sentFromParentEl;
   };
 
-  private logIncomingMessage = (msg: InterfaceMessageEvent): void => {
-    console.info(
-      `ConsoleKit: A message was received from origin ${msg.origin}. `,
-      msg.data
-    );
-  };
-
   private onParentMessage = (msg: InterfaceMessageEvent): void => {
     if (this.isValidMessage(msg)) {
-      this.logIncomingMessage(msg);
       this.handleIncomingMessage(msg.data);
-    } else {
-      console.info(
-        "ConsoleKit: A message was received from an unknown origin. ",
-        msg.origin
-      );
     }
   };
 
