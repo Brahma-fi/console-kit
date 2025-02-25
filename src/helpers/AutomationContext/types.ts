@@ -109,6 +109,7 @@ export type SubscribeAutomationParams = {
     registryID: string;
     chainId: number;
     ownerAddress: string;
+    whitelistedAddress: string;
   };
 };
 
