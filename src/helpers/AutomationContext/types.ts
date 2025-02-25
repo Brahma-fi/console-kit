@@ -169,6 +169,7 @@ export type VendorCancelAutomationParams = {
       data: string;
     }[];
     ownerConsole: Address;
+    sweepTokenReceiver: Address;
   };
 };
 
