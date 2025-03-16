@@ -188,7 +188,7 @@ The `fetchSubscriptionsByRegistryID` function retrieves subscriptions for a spec
 // Default metadata
 const subscriptions = await automationContext.fetchSubscriptionsByRegistryID(
   eoa,
-  executorId
+  registryId
 );
 
 // Custom metadata
@@ -196,7 +196,7 @@ type CustomMetadata = { customField1?: string; customField2?: number };
 const customSubscriptions =
   await automationContext.fetchSubscriptionsByRegistryID<CustomMetadata>(
     eoa,
-    executorId
+    registryId
   );
 ```
 
