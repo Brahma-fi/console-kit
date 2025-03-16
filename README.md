@@ -178,18 +178,18 @@ const customSubscriptions =
   );
 ```
 
-##### Fetching EOA Automation Subscriptions
+#### Fetching Automation Subscriptions by Registry Id
 
-The `fetchEoaAutomationSubscriptions` function retrieves subscriptions for a specific externally owned account (EOA) and executor ID. Similar to the previous function, you can specify a custom metadata type.
+The `fetchSubscriptionsByRegistryID` function retrieves subscriptions for a specific externally owned account (EOA) and registry ID. Similar to the previous function, you can specify a custom metadata type.
 
-- **Default Metadata**: If no template is provided, the metadata will include only `baseToken` and `every`. See the [BaseMetadata](./src/helpers/AutomationContext/types.ts#L1) type definition.
-- **Custom Metadata**: Specify a template to include additional fields. See the [CustomMetadata](./src/helpers/AutomationContext/types.ts#L4) type definition.
+- **Default Metadata**: If no template is provided, the metadata will include only `baseToken` and `every`. See the [BaseMetadata](./src/helpers/AutomationContext/types.ts#L57) type definition.
+- **Custom Metadata**: Specify a template to include additional fields. See the [CustomMetadata](./src/helpers/AutomationContext/types.ts#L69) type definition.
 
 **Example:**
 
 ```typescript
 // Default metadata
-const subscriptions = await automationContext.fetchEoaAutomationSubscriptions(
+const subscriptions = await automationContext.fetchSubscriptionsByRegistryID(
   eoa,
   executorId
 );
@@ -197,7 +197,7 @@ const subscriptions = await automationContext.fetchEoaAutomationSubscriptions(
 // Custom metadata
 type CustomMetadata = { customField1?: string; customField2?: number };
 const customSubscriptions =
-  await automationContext.fetchEoaAutomationSubscriptions<CustomMetadata>(
+  await automationContext.fetchSubscriptionsByRegistryID<CustomMetadata>(
     eoa,
     executorId
   );

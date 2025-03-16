@@ -170,13 +170,13 @@ export class AutomationContext {
   }
 
   /**
-   * Fetches automation subscriptions associated with a given externally owned account (EOA) and executor ID.
+   * Fetches automation subscriptions associated with a given externally owned account (EOA) and registry ID.
    *
    * This function allows users to specify a custom metadata type for the subscriptions. If no type is specified,
    * the default metadata structure will include only the required fields: `baseToken` and `every`.
    *
    * @param {Address} eoa - The address of the externally owned account to fetch subscriptions for.
-   * @param {string} executorId - The ID of the executor.
+   * @param {string} registryId - The ID of the executor/registry.
    * @returns {Promise<AutomationSubscription<T>[]>} A promise that resolves to an array of subscriptions with custom metadata.
    * @throws Will return an empty array if no subscriptions are found or if an error occurs during the fetch.
    *
@@ -184,28 +184,28 @@ export class AutomationContext {
    *
    * @example
    * // Fetch subscriptions with default metadata
-   * const subscriptions = await automationContext.fetchSubscriptionsByRegistryID(eoa, executorId);
+   * const subscriptions = await automationContext.fetchSubscriptionsByRegistryID(eoa, registryId);
    *
    * // Fetch subscriptions with custom metadata
    * type CustomMetadata = { customField1?: string; customField2?: number; };
-   * const customSubscriptions = await automationContext.fetchSubscriptionsByRegistryID<CustomMetadata>(eoa, executorId);
+   * const customSubscriptions = await automationContext.fetchSubscriptionsByRegistryID<CustomMetadata>(eoa, registryId);
    */
   async fetchSubscriptionsByRegistryID<T = {}>(
     eoa: Address,
-    executorId: string
+    registryId: string
   ): Promise<AutomationSubscription<T>[]> {
     try {
-      if (!eoa || !executorId) {
-        throw new Error("EOA and executorId are required");
+      if (!eoa || !registryId) {
+        throw new Error("EOA and registryId are required");
       }
 
       const response = await this.axiosInstance.get<{
         data: AutomationSubscription<T>[];
-      }>(`${routes.fetchAutomationSubscriptions}/owner/${eoa}/${executorId}`);
+      }>(`${routes.fetchAutomationSubscriptions}/owner/${eoa}/${registryId}`);
 
       if (!response.data.data) {
         throw new Error(
-          "No subscriptions found for the given EOA and executorId"
+          "No subscriptions found for the given EOA and registryId"
         );
       }
 
