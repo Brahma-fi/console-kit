@@ -123,27 +123,89 @@ export class AutomationContext {
   /**
    * Fetches automation subscriptions associated with a given account address and blockchain network.
    *
+   * This function allows users to specify a custom metadata type for the subscriptions. If no type is specified,
+   * the default metadata structure will include only the required fields: `baseToken` and `every`.
+   *
    * @param {Address} accountAddress - The address of the account to fetch subscriptions for.
    * @param {number} chainId - The ID of the blockchain network.
-   * @returns {Promise<AutomationSubscription[]>} A promise that resolves to an array of AutomationSubscription objects.
+   * @returns {Promise<AutomationSubscription<T>[]>} A promise that resolves to an array of AutomationSubscription objects with custom metadata.
    * @throws Will return an empty array if no subscriptions are found or if an error occurs during the fetch.
+   *
+   * @template T - The type of the additional metadata. Defaults to an empty object if not specified.
+   *
+   * @example
+   * // Fetch subscriptions with default metadata
+   * const subscriptions = await automationContext.fetchAutomationSubscriptions(accountAddress, chainId);
+   *
+   * // Fetch subscriptions with custom metadata
+   * type CustomMetadata = { customField1?: string; customField2?: number; };
+   * const customSubscriptions = await automationContext.fetchAutomationSubscriptions<CustomMetadata>(accountAddress, chainId);
    */
-  async fetchAutomationSubscriptions(
+  async fetchAutomationSubscriptions<T = {}>(
     accountAddress: Address,
     chainId: number
-  ): Promise<AutomationSubscription[]> {
+  ): Promise<AutomationSubscription<T>[]> {
     try {
       if (!accountAddress || !chainId) {
         throw new Error("Brahma Account address and chain ID are required");
       }
 
       const response = await this.axiosInstance.get<{
-        data: AutomationSubscription[];
-      }>(`${routes.fetchAutomationSubscriptions}/${accountAddress}/${chainId}`);
+        data: AutomationSubscription<T>[];
+      }>(
+        `${routes.fetchAutomationSubscriptions}/console/${accountAddress}/${chainId}`
+      );
 
       if (!response.data.data) {
         throw new Error(
           "No subscriptions found for the given account address and chain ID"
+        );
+      }
+
+      return response.data.data;
+    } catch (err: any) {
+      console.error(`Error fetching automation subscriptions: ${err.message}`);
+      return [];
+    }
+  }
+
+  /**
+   * Fetches automation subscriptions associated with a given externally owned account (EOA) and executor ID.
+   *
+   * This function allows users to specify a custom metadata type for the subscriptions. If no type is specified,
+   * the default metadata structure will include only the required fields: `baseToken` and `every`.
+   *
+   * @param {Address} eoa - The address of the externally owned account to fetch subscriptions for.
+   * @param {string} executorId - The ID of the executor.
+   * @returns {Promise<AutomationSubscription<T>[]>} A promise that resolves to an array of subscriptions with custom metadata.
+   * @throws Will return an empty array if no subscriptions are found or if an error occurs during the fetch.
+   *
+   * @template T - The type of the additional metadata. Defaults to an empty object if not specified.
+   *
+   * @example
+   * // Fetch subscriptions with default metadata
+   * const subscriptions = await automationContext.fetchEoaAutomationSubscriptions(eoa, executorId);
+   *
+   * // Fetch subscriptions with custom metadata
+   * type CustomMetadata = { customField1?: string; customField2?: number; };
+   * const customSubscriptions = await automationContext.fetchEoaAutomationSubscriptions<CustomMetadata>(eoa, executorId);
+   */
+  async fetchEoaAutomationSubscriptions<T = {}>(
+    eoa: Address,
+    executorId: string
+  ): Promise<AutomationSubscription<T>[]> {
+    try {
+      if (!eoa || !executorId) {
+        throw new Error("EOA and executorId are required");
+      }
+
+      const response = await this.axiosInstance.get<{
+        data: AutomationSubscription<T>[];
+      }>(`${routes.fetchAutomationSubscriptions}/owner/${eoa}/${executorId}`);
+
+      if (!response.data.data) {
+        throw new Error(
+          "No subscriptions found for the given EOA and executorId"
         );
       }
 

@@ -1,6 +1,6 @@
 const routes = {
   generateCalldata: "/builder/generate",
-  fetchAutomationSubscriptions: "/automations/subscriptions/console",
+  fetchAutomationSubscriptions: "/automations/subscriptions",
   fetchAutomationLogs: "/kernel/logs",
   kernelTasks: "/kernel/tasks",
   kernelExecutor: "/kernel/executor",
