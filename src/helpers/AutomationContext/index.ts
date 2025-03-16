@@ -184,13 +184,13 @@ export class AutomationContext {
    *
    * @example
    * // Fetch subscriptions with default metadata
-   * const subscriptions = await automationContext.fetchEoaAutomationSubscriptions(eoa, executorId);
+   * const subscriptions = await automationContext.fetchSubscriptionsByRegistryID(eoa, executorId);
    *
    * // Fetch subscriptions with custom metadata
    * type CustomMetadata = { customField1?: string; customField2?: number; };
-   * const customSubscriptions = await automationContext.fetchEoaAutomationSubscriptions<CustomMetadata>(eoa, executorId);
+   * const customSubscriptions = await automationContext.fetchSubscriptionsByRegistryID<CustomMetadata>(eoa, executorId);
    */
-  async fetchEoaAutomationSubscriptions<T = {}>(
+  async fetchSubscriptionsByRegistryID<T = {}>(
     eoa: Address,
     executorId: string
   ): Promise<AutomationSubscription<T>[]> {
