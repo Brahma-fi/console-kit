@@ -118,6 +118,7 @@ export type AutomationSubscription<T = {}> = {
  * @property {string} data.registryID - The registry ID associated with the automation.
  * @property {number} data.chainId - The ID of the blockchain network for the data.
  * @property {string} data.ownerAddress - The address of the owner subscribing to the automation.
+ * @property {Address[]} [data.whitelistedAddresses] - Optional list of addresses that are allowed to interact with the subscription.
  */
 export type SubscribeAutomationParams = {
   chainId: number;
