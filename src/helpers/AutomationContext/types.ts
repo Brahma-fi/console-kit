@@ -49,7 +49,32 @@ export type AutomationLogResponse = {
 };
 
 /**
+ * Represents the base metadata required for an automation subscription.
+ *
+ * @property {string} baseToken - The base token involved in the subscription.
+ * @property {string} every - The frequency of the automation.
+ */
+type BaseMetadata = {
+  baseToken: string;
+  every: string;
+};
+
+/**
+ * Represents custom metadata for an automation subscription, extending the base metadata.
+ *
+ * This type allows for additional fields to be specified, providing flexibility for different use cases.
+ *
+ * @template T - The type of additional metadata fields. Defaults to an empty object if not specified.
+ */
+type CustomMetadata<T = {}> = BaseMetadata & T;
+
+/**
  * Represents an automation subscription associated with an account.
+ *
+ * This type includes all necessary information about an automation subscription, including its metadata,
+ * which can be customized using the `CustomMetadata` type.
+ *
+ * @template T - The type of additional metadata fields. Defaults to an empty object if not specified.
  *
  * @property {number} chainId - The ID of the blockchain network.
  * @property {string} commitHash - The commit hash associated with the subscription.
@@ -58,16 +83,14 @@ export type AutomationLogResponse = {
  * @property {string} feeAmount - The fee amount for the subscription.
  * @property {Address} feeToken - The address of the token used for the fee.
  * @property {string} id - The unique identifier of the subscription.
- * @property {Object} metadata - Additional metadata for the subscription.
- * @property {string} metadata.baseToken - The base token involved in the subscription.
- * @property {string} metadata.every - The frequency of the automation.
+ * @property {CustomMetadata<T>} metadata - Additional metadata for the subscription.
  * @property {string} registryId - The registry ID associated with the subscription.
  * @property {number} status - The status of the subscription (e.g., 2 for active).
  * @property {Address} subAccountAddress - The address of the sub-account associated with the subscription.
  * @property {Record<Address, string>} tokenInputs - The input tokens required for the automation, mapped by token addresses.
  * @property {Record<Address, string>} tokenLimits - The limits for each token involved in the automation, mapped by token addresses.
  */
-export type AutomationSubscription = {
+export type AutomationSubscription<T = {}> = {
   chainId: number;
   commitHash: string;
   createdAt: string;
@@ -75,10 +98,7 @@ export type AutomationSubscription = {
   feeAmount: string;
   feeToken: Address;
   id: string;
-  metadata: {
-    baseToken: string;
-    every: string;
-  };
+  metadata: CustomMetadata<T>;
   registryId: string;
   status: number; // 2 === active status
   subAccountAddress: Address;
@@ -98,6 +118,7 @@ export type AutomationSubscription = {
  * @property {string} data.registryID - The registry ID associated with the automation.
  * @property {number} data.chainId - The ID of the blockchain network for the data.
  * @property {string} data.ownerAddress - The address of the owner subscribing to the automation.
+ * @property {Address[]} [data.whitelistedAddresses] - Optional list of addresses that are allowed to interact with the subscription.
  */
 export type SubscribeAutomationParams = {
   chainId: number;
@@ -109,7 +130,7 @@ export type SubscribeAutomationParams = {
     registryID: string;
     chainId: number;
     ownerAddress: string;
-    whitelistedAddress: string;
+    whitelistedAddresses?: Address[];
   };
 };
 

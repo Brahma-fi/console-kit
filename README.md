@@ -151,6 +151,58 @@ async function subscribeToAutomation(params: any) {
 }
 ```
 
+#### Fetching Automation Subscriptions
+
+The `fetchAutomationSubscriptions` function retrieves subscriptions associated with a given account address and blockchain network. You can specify a custom metadata type, or use the default structure.
+
+ConsoleKit provides flexible functions to fetch automation subscriptions with customizable metadata. This allows you to tailor the metadata structure to your specific needs.
+
+- **Default Metadata**: If no template is provided, the metadata will include only `baseToken` and `every`. See the [BaseMetadata](./src/helpers/AutomationContext/types.ts#L57) type definition.
+- **Custom Metadata**: Specify a template to include additional fields. See the [CustomMetadata](./src/helpers/AutomationContext/types.ts#L69) type definition.
+
+**Example:**
+
+```typescript
+// Default metadata
+const subscriptions = await automationContext.fetchAutomationSubscriptions(
+  accountAddress,
+  chainId
+);
+
+// Custom metadata
+type CustomMetadata = { customField1?: string; customField2?: number };
+const customSubscriptions =
+  await automationContext.fetchAutomationSubscriptions<CustomMetadata>(
+    accountAddress,
+    chainId
+  );
+```
+
+#### Fetching Automation Subscriptions by Registry Id
+
+The `fetchSubscriptionsByRegistryID` function retrieves subscriptions for a specific externally owned account (EOA) and registry ID. Similar to the previous function, you can specify a custom metadata type.
+
+- **Default Metadata**: If no template is provided, the metadata will include only `baseToken` and `every`. See the [BaseMetadata](./src/helpers/AutomationContext/types.ts#L57) type definition.
+- **Custom Metadata**: Specify a template to include additional fields. See the [CustomMetadata](./src/helpers/AutomationContext/types.ts#L69) type definition.
+
+**Example:**
+
+```typescript
+// Default metadata
+const subscriptions = await automationContext.fetchSubscriptionsByRegistryID(
+  eoa,
+  executorId
+);
+
+// Custom metadata
+type CustomMetadata = { customField1?: string; customField2?: number };
+const customSubscriptions =
+  await automationContext.fetchSubscriptionsByRegistryID<CustomMetadata>(
+    eoa,
+    executorId
+  );
+```
+
 This overview provides a basic understanding of how to initialize and use the main classes in the `ConsoleKit` SDK. For more detailed usage, refer to the documentation or explore the source code.
 
 ## Brahma Accounts Security Audits
@@ -166,4 +218,5 @@ Security audits performed on Brahma accounts. Please refer to the following repo
 This project is licensed under the MIT License.
 
 ### Note
+
 Safe Agenthon api-key: `65832024-c1f4-48d2-81e6-3460f2722600` and url: `https://dev.console.fi/`
