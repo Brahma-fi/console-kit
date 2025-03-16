@@ -182,9 +182,6 @@ const customSubscriptions =
 
 The `fetchSubscriptionsByRegistryID` function retrieves subscriptions for a specific externally owned account (EOA) and registry ID. Similar to the previous function, you can specify a custom metadata type.
 
-- **Default Metadata**: If no template is provided, the metadata will include only `baseToken` and `every`. See the [BaseMetadata](./src/helpers/AutomationContext/types.ts#L57) type definition.
-- **Custom Metadata**: Specify a template to include additional fields. See the [CustomMetadata](./src/helpers/AutomationContext/types.ts#L69) type definition.
-
 **Example:**
 
 ```typescript
