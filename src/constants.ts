@@ -1,4 +1,4 @@
-import { Abi, Address, getAddress } from "viem";
+import { Address, getAddress } from "viem";
 
 export const ADDRESSES = {
   PROD: {
@@ -24,20 +24,3 @@ export type AddressMetaRegistry = Record<string, AddressRegistry>;
 export type ConsoleContractNames =
   | keyof typeof ADDRESSES.DEV
   | keyof typeof ADDRESSES.PROD;
-
-export const safeAbi: Abi = [
-  {
-    inputs: [],
-    name: "getThreshold",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "getOwners",
-    outputs: [{ internalType: "address[]", name: "", type: "address[]" }],
-    stateMutability: "view",
-    type: "function",
-  },
-];

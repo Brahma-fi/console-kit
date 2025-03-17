@@ -1,5 +1,13 @@
 import axios, { AxiosError, AxiosInstance } from "axios";
-import { Address, createPublicClient, Hex, http } from "viem";
+import {
+  Address,
+  createPublicClient,
+  encodeFunctionData,
+  encodePacked,
+  Hex,
+  http,
+} from "viem";
+import Safe from "@safe-global/protocol-kit";
 
 import routes from "@/routes";
 
@@ -17,11 +25,11 @@ import {
   SwapParams,
   SwapQuoteRoute,
 } from "./types";
-import { safeAbi } from "@/constants";
 import { CHAIN_CONFIG } from "@/wagmi";
 import { SupportedChainIds } from "@/types";
 import { pollWithRetries } from "@/utils";
 import { PublicDeployer } from "../PublicDeployer";
+import { safeAbi } from "@/abi";
 
 export class CoreActions {
   private readonly axiosInstance: AxiosInstance;
@@ -443,6 +451,100 @@ export class CoreActions {
   }
 
   /**
+   * Executes a safe transaction on the blockchain using the Gnosis Safe protocol.
+   *
+   * This function initializes a Safe instance with the provided RPC URL and console address,
+   * creates a transaction with the specified parameters, and encodes the transaction data
+   * for execution. It returns the encoded transaction data ready for submission.
+   *
+   * @param {Address} eoa - The externally owned account (EOA) address initiating the transaction.
+   * @param {Address} consoleAddress - The address of the Gnosis Safe console.
+   * @param {number} chainId - The ID of the blockchain network where the transaction will be executed.
+   * @param {Array} transactions - An array of transaction objects, each containing:
+   *   @param {Address} transactions[].to - The recipient address of the transaction.
+   *   @param {string} transactions[].data - The calldata for the transaction.
+   *   @param {string} transactions[].value - The value to be transferred in the transaction.
+   *   @param {number} transactions[].operation - The operation type of the transaction.
+   * @returns {Promise<{ to: Address, value: string, data: string }>} A promise that resolves to an object containing:
+   *   - `to`: The console address where the transaction is executed.
+   *   - `value`: The value to be transferred (always "0" in this context).
+   *   - `data`: The encoded transaction data ready for execution.
+   * @throws {Error} Throws an error if the chain ID is unsupported or if any step in the transaction creation fails.
+   */
+  async executeSafeTransaction(
+    eoa: Address,
+    consoleAddress: Address,
+    chainId: number,
+    transactions: {
+      to: Address;
+      data: string;
+      value: string;
+      operation: number;
+    }[]
+  ): Promise<{ to: Address; value: string; data: string }> {
+    // Get chain RPC from CHAIN_CONFIG
+    const chain = CHAIN_CONFIG[chainId as SupportedChainIds];
+    if (!chain) throw new Error(`Unsupported chain ID: ${chainId}`);
+
+    const rpcUrl = chain.rpcUrls.default.http[0];
+
+    const safe = await Safe.init({
+      provider: rpcUrl,
+      safeAddress: consoleAddress,
+    });
+
+    const transaction = await safe.createTransaction({
+      transactions,
+      onlyCalls: false,
+    });
+
+    const {
+      baseGas,
+      data,
+      gasPrice,
+      gasToken,
+      operation,
+      refundReceiver,
+      safeTxGas,
+      to,
+      value,
+    } = transaction.data;
+
+    const signature = encodePacked(
+      ["bytes12", "address", "bytes32", "bytes1"],
+      [
+        "0x000000000000000000000000",
+        eoa,
+        "0x0000000000000000000000000000000000000000000000000000000000000000",
+        "0x01",
+      ]
+    );
+
+    const dataEncoded = encodeFunctionData({
+      abi: safeAbi,
+      functionName: "execTransaction",
+      args: [
+        to,
+        BigInt(value),
+        data as Hex,
+        operation,
+        BigInt(safeTxGas),
+        BigInt(baseGas),
+        BigInt(gasPrice),
+        gasToken,
+        refundReceiver,
+        signature,
+      ],
+    });
+
+    return {
+      to: consoleAddress,
+      value: "0",
+      data: dataEncoded,
+    };
+  }
+
+  /**
    * Waits for a transaction to be relayed by polling the deployment status.
    *
    * This function continuously polls the deployment status of a transaction
@@ -457,8 +559,8 @@ export class CoreActions {
    *                 of attempts or if an unexpected error occurs during polling.
    */
   async waitForTransactionToRelay(taskId: string): Promise<string> {
-    const POLLING_INTERVAL = 5000;
     const MAX_ATTEMPTS = 20;
+    const POLLING_INTERVAL = 5000;
 
     return pollWithRetries(
       async () => await this.publicDeployer.fetchDeploymentStatus(taskId),
