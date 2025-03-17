@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosInstance } from "axios";
-import { Address } from "viem";
+import { Address, createPublicClient, Hex, http } from "viem";
 
 import routes from "@/routes";
 
@@ -15,8 +15,11 @@ import {
   SendParams,
   SolverParams,
   SwapParams,
-  SwapQuoteRoute
+  SwapQuoteRoute,
 } from "./types";
+import { safeAbi } from "@/constants";
+import { CHAIN_CONFIG } from "@/wagmi";
+import { SupportedChainIds } from "@/types";
 
 export class CoreActions {
   private readonly axiosInstance: AxiosInstance;
@@ -25,19 +28,30 @@ export class CoreActions {
     this.axiosInstance = axios.create({
       baseURL,
       headers: {
-        "x-api-key": apiKey
-      }
+        "x-api-key": apiKey,
+      },
     });
   }
 
   /**
    * Fetches existing accounts associated with a given Externally Owned Account (EOA).
    *
-   * @param {Address} eoa - The address of EOA to fetch Accounts for.
-   * @returns {Promise<Account[]>} A promise that resolves to an array of Accounts.
-   * @throws Will return an empty array if no accounts are found or if an error occurs during the fetch.
+   * @param {Address} eoa - The address of the EOA to fetch accounts for.
+   * @param {Object} [filter] - Optional filters for narrowing down results.
+   * @param {number} [filter.chainId] - Chain ID to filter accounts.
+   * @param {number} [filter.threshold] - Required threshold value.
+   * @param {number} [filter.ownersCount] - Required number of owners.
+   * @returns {Promise<Account[]>} A promise that resolves to an array of filtered accounts.
+   * @throws Returns an empty array if no accounts are found or an error occurs during the fetch.
    */
-  async fetchExistingAccounts(eoa: Address): Promise<Account[]> {
+  async fetchExistingAccounts(
+    eoa: Address,
+    filter?: {
+      chainId?: number;
+      threshold?: number;
+      ownersCount?: number;
+    }
+  ): Promise<Account[]> {
     try {
       if (!eoa) {
         throw new Error("EOA (Externally Owned Account) is required");
@@ -46,12 +60,91 @@ export class CoreActions {
       const response = await this.axiosInstance.get<{ data: Account[] }>(
         `${routes.fetchExistingAccounts}/${eoa}`
       );
+      let allAccounts = response.data.data;
 
-      if (!response.data.data) {
-        throw new Error("No accounts found for the given EOA");
+      if (!allAccounts || allAccounts.length === 0) {
+        console.warn(`No accounts found for EOA: ${eoa}`);
+        return [];
       }
 
-      return response.data.data;
+      if (filter?.chainId !== undefined) {
+        allAccounts = allAccounts.filter(
+          (account) => account.chainId === filter.chainId
+        );
+      }
+
+      if (
+        filter?.threshold === undefined &&
+        filter?.ownersCount === undefined
+      ) {
+        console.log("No additional filtering required, returning accounts.");
+        return allAccounts;
+      }
+
+      const accountsByChain: Record<number, Account[]> = {};
+      for (const account of allAccounts) {
+        accountsByChain[account.chainId] =
+          accountsByChain[account.chainId] || [];
+        accountsByChain[account.chainId].push(account);
+      }
+
+      let filteredAccounts: Account[] = [];
+
+      for (const [chainId, accounts] of Object.entries(accountsByChain)) {
+        if (!CHAIN_CONFIG[Number(chainId) as SupportedChainIds]) {
+          console.warn(`Unsupported chainId: ${chainId}, skipping...`);
+          continue;
+        }
+
+        const publicClient = createPublicClient({
+          chain: CHAIN_CONFIG[Number(chainId) as SupportedChainIds],
+          transport: http(),
+        });
+
+        const results = await publicClient.multicall({
+          contracts: accounts.flatMap((account) => [
+            {
+              address: account.consoleAddress as Address,
+              abi: safeAbi,
+              functionName: "getThreshold",
+            },
+            {
+              address: account.consoleAddress as Address,
+              abi: safeAbi,
+              functionName: "getOwners",
+            },
+          ]),
+        });
+
+        accounts.forEach((account, index) => {
+          const thresholdResult = results[index * 2];
+          const ownersResult = results[index * 2 + 1];
+
+          if (
+            thresholdResult.status === "failure" ||
+            ownersResult.status === "failure"
+          ) {
+            console.error(
+              `Multicall failed for account: ${account.consoleAddress}, skipping...`
+            );
+            return;
+          }
+
+          const threshold = Number(thresholdResult.result ?? "0");
+          const owners = ownersResult.result as Address[];
+
+          const matchesThreshold =
+            filter.threshold == null || threshold === filter.threshold;
+          const matchesOwnersCount =
+            filter.ownersCount == null || owners.length === filter.ownersCount;
+
+          if (matchesThreshold && matchesOwnersCount) {
+            filteredAccounts.push(account);
+          }
+        });
+      }
+
+      return filteredAccounts;
     } catch (err: any) {
       console.error(`Error fetching existing accounts: ${err.message}`);
       return [];
@@ -82,8 +175,8 @@ export class CoreActions {
             id: ActionNameToId.send,
             chainId: chainId,
             consoleAddress: accountAddress,
-            params
-          }
+            params,
+          },
         } as GeneratePayload<SendParams, "BUILD">
       );
 
@@ -118,8 +211,8 @@ export class CoreActions {
             id: ActionNameToId.swap,
             chainId: chainId,
             consoleAddress: accountAddress,
-            params
-          }
+            params,
+          },
         } as GeneratePayload<SwapParams, "BUILD">
       );
 
@@ -156,7 +249,7 @@ export class CoreActions {
       toAssetAddress,
       ownerAddress,
       fromAmount,
-      slippage
+      slippage,
     };
 
     try {
@@ -180,7 +273,7 @@ export class CoreActions {
 
       return {
         data: [],
-        error: error.response?.data?.message ?? error.message
+        error: error.response?.data?.message ?? error.message,
       };
     }
   }
@@ -209,8 +302,8 @@ export class CoreActions {
             id: ActionNameToId.bridging,
             chainId: chainId,
             consoleAddress: accountAddress,
-            params
-          }
+            params,
+          },
         } as GeneratePayload<BridgeParams, "BUILD">
       );
 
@@ -239,7 +332,7 @@ export class CoreActions {
         amountOut: params.amountOut.toString(),
         slippage: params.slippage.toString(),
         ownerAddress: params.ownerAddress,
-        recipient: params.recipient
+        recipient: params.recipient,
       }).toString();
 
       const url = `${routes.fetchBridgingRoutes}?${query}`;
@@ -270,7 +363,7 @@ export class CoreActions {
         pid: pid.toString(),
         transactionHash: txnHash,
         fromChainId: fromChainId.toString(),
-        toChainId: toChainId.toString()
+        toChainId: toChainId.toString(),
       });
 
       const response = await this.axiosInstance.get<GetBridgingStatus>(
@@ -332,9 +425,9 @@ export class CoreActions {
             consoleAddress: accountAddress,
             params: {
               ...params,
-              slippage: params.slippage * 1e2 // 4 basis points
-            }
-          }
+              slippage: params.slippage * 1e2, // 4 basis points
+            },
+          },
         } as GeneratePayload<SolverParams, "BUILD">
       );
 

@@ -1,4 +1,11 @@
 import { Address } from "viem";
+import { SUPPORTED_CHAINS_IDS } from "./wagmi";
+
+export type SupportedChainIds = (typeof SUPPORTED_CHAINS_IDS)[number];
+
+export type ChainConfig<T> = {
+  [K in SupportedChainIds]: T;
+};
 
 export type TAsset = {
   name: string;
