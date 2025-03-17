@@ -7,7 +7,7 @@ const generateId = (len: number): string => {
   return Array.from(arr, dec2hex).join("");
 };
 
-const generateRequestId = (): string => {
+export const generateRequestId = (): string => {
   if (typeof window !== "undefined") {
     return generateId(10);
   }
@@ -65,5 +65,3 @@ export async function pollWithRetries<T>(
     poll();
   });
 }
-
-export { generateRequestId };

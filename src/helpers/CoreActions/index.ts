@@ -21,8 +21,8 @@ import {
 import { safeAbi } from "@/constants";
 import { CHAIN_CONFIG } from "@/wagmi";
 import { SupportedChainIds } from "@/types";
-import { PublicDeployer } from "../PublicDeployer";
 import { pollWithRetries } from "@/utils";
+import { PublicDeployer } from "../PublicDeployer";
 
 export class CoreActions {
   private readonly axiosInstance: AxiosInstance;

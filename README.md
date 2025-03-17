@@ -42,9 +42,9 @@ DeFi agents often involve complex parameters and operations. Make them accessibl
 
 Turn "Set a DCA strategy for 1000 USDC into ETH over 30 days with increased buys during high sentiment periods" into executable actions.
 
-Check out these examples demonstrating how to interface ConsoleKit agents with popular AI frameworks like elizaOS, openAi SDK, and langChain:
+Check out these examples demonstrating how to interface ConsoleKit agents with popular AI frameworks like openAi SDK, and langChain or directly as MCP server:
 
-- [ElizaOS](https://github.com/Brahma-fi/scaffold-agent/tree/ft-addEliza)
+- [MCP](https://github.com/Brahma-fi/scaffold-agent/tree/ft-mcpserver)
 - [OpenAI SDK](https://github.com/Brahma-fi/scaffold-agent/tree/ft-addOpenAi)
 - [LangChain](https://github.com/Brahma-fi/scaffold-agent/tree/ft-addLangchain)
 
