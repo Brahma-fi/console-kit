@@ -17,6 +17,16 @@ describe("CoreActions", () => {
   const ownersCount = 1;
   const threshold = 1;
 
+  const consoleAddress = "0x2d3bdafbb56dab49787dc33581f1f26ab95500c5";
+  const transactions = [
+    {
+      to: "0x1234567890abcdef1234567890abcdef12345678",
+      data: "0x",
+      value: "0",
+      operation: 0,
+    },
+  ];
+
   beforeAll(() => {
     if (!apiKey || !baseURL) {
       throw new Error("Missing API_KEY or BASE_URL in environment variables");
@@ -31,8 +41,19 @@ describe("CoreActions", () => {
       threshold,
     });
 
-    console.log({ accounts });
-
     expect(accounts.length).toBeGreaterThan(0);
+  });
+
+  it("should execute a safe transaction and return encoded data", async () => {
+    const result = await coreActions.executeSafeTransaction(
+      eoa,
+      consoleAddress,
+      chainId,
+      transactions
+    );
+
+    expect(result.to).toBe(consoleAddress);
+    expect(result.value).toBe("0");
+    expect(result.data).toBeDefined(); // Check that data is encoded
   });
 });
