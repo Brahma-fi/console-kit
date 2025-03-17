@@ -1,5 +1,6 @@
 import axios, { AxiosError, AxiosInstance } from "axios";
-import { Address, createPublicClient, Hex, http } from "viem";
+import { Address, createPublicClient, encodePacked, http } from "viem";
+import Safe from "@safe-global/protocol-kit";
 
 import routes from "@/routes";
 
@@ -20,9 +21,12 @@ import {
 import { safeAbi } from "@/constants";
 import { CHAIN_CONFIG } from "@/wagmi";
 import { SupportedChainIds } from "@/types";
+import { PublicDeployer } from "../PublicDeployer";
+import { pollWithRetries } from "@/utils";
 
 export class CoreActions {
   private readonly axiosInstance: AxiosInstance;
+  private readonly publicDeployer: PublicDeployer;
 
   constructor(apiKey: string, baseURL: string) {
     this.axiosInstance = axios.create({
@@ -31,6 +35,7 @@ export class CoreActions {
         "x-api-key": apiKey,
       },
     });
+    this.publicDeployer = new PublicDeployer(apiKey, baseURL);
   }
 
   /**
@@ -436,5 +441,105 @@ export class CoreActions {
       console.error(`Error generating calldata: ${err.message}`);
       throw err;
     }
+  }
+
+  async executeSafeTransaction(
+    eoa: Address,
+    consoleAddress: Address,
+    chainId: number,
+    transactions: {
+      to: Address;
+      data: string;
+      value: string;
+      operation: number;
+    }[]
+  ) {
+    // Get chain RPC from CHAIN_CONFIG
+    const chain = CHAIN_CONFIG[chainId as SupportedChainIds];
+    if (!chain) throw new Error(`Unsupported chain ID: ${chainId}`);
+
+    const rpcUrl = chain.rpcUrls.default.http[0];
+
+    const safe = await Safe.init({
+      provider: rpcUrl,
+      safeAddress: consoleAddress,
+    });
+
+    const transaction = await safe.createTransaction({
+      transactions,
+      onlyCalls: false,
+    });
+
+    const {
+      baseGas,
+      data,
+      gasPrice,
+      gasToken,
+      operation,
+      refundReceiver,
+      safeTxGas,
+      to,
+      value,
+    } = transaction.data;
+
+    const signature = encodePacked(
+      ["bytes12", "address", "bytes32", "bytes1"],
+      [
+        "0x000000000000000000000000",
+        eoa,
+        "0x0000000000000000000000000000000000000000000000000000000000000000",
+        "0x01",
+      ]
+    );
+
+    const txnHash = await this.signer.writeContract({
+      chain: this.chain,
+      address: consoleAddress,
+      abi: this.withdrawAbi,
+      functionName: "execTransaction",
+      account: eoa,
+      gas: BigInt(2000000),
+      args: [
+        to,
+        value,
+        data,
+        operation,
+        safeTxGas,
+        baseGas,
+        gasPrice,
+        gasToken,
+        refundReceiver,
+        signature,
+      ],
+    });
+
+    return txnHash;
+  }
+
+  /**
+   * Waits for a transaction to be relayed by polling the deployment status.
+   *
+   * This function continuously polls the deployment status of a transaction
+   * associated with the given task ID. It resolves with the transaction hash
+   * once the transaction is successfully relayed, or rejects with an error
+   * if the polling exceeds the maximum number of attempts.
+   *
+   * @param {string} taskId - The unique identifier for the deployment task.
+   * @returns {Promise<string>} A promise that resolves to the transaction hash
+   *                            if the transaction is successfully relayed.
+   * @throws {Error} Throws an error if the polling exceeds the maximum number
+   *                 of attempts or if an unexpected error occurs during polling.
+   */
+  async waitForTransactionToRelay(taskId: string): Promise<string> {
+    const POLLING_INTERVAL = 5000;
+    const MAX_ATTEMPTS = 20;
+
+    return pollWithRetries(
+      async () => await this.publicDeployer.fetchDeploymentStatus(taskId),
+      (data) => data?.status === "successful",
+      (data) => data?.outputTransactionHash || null,
+      MAX_ATTEMPTS,
+      POLLING_INTERVAL
+    );
   }
 }
