@@ -451,7 +451,8 @@ export class CoreActions {
   }
 
   /**
-   * Executes a safe transaction on the blockchain using the Gnosis Safe protocol.
+   * Creates and executes a new safe transaction on the blockchain using the Gnosis Safe protocol,
+   * specifically for scenarios with a single threshold.
    *
    * This function initializes a Safe instance with the provided RPC URL and console address,
    * creates a transaction with the specified parameters, and encodes the transaction data
@@ -471,7 +472,7 @@ export class CoreActions {
    *   - `data`: The encoded transaction data ready for execution.
    * @throws {Error} Throws an error if the chain ID is unsupported or if any step in the transaction creation fails.
    */
-  async executeSafeTransaction(
+  async newSafeTransactionWithSingleThreshold(
     eoa: Address,
     consoleAddress: Address,
     chainId: number,

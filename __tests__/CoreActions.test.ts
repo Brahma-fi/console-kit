@@ -44,8 +44,8 @@ describe("CoreActions", () => {
     expect(accounts.length).toBeGreaterThan(0);
   });
 
-  it("should execute a safe transaction and return encoded data", async () => {
-    const result = await coreActions.executeSafeTransaction(
+  it("should execute a new safe transaction with single threshold and return encoded data", async () => {
+    const result = await coreActions.newSafeTransactionWithSingleThreshold(
       eoa,
       consoleAddress,
       chainId,
