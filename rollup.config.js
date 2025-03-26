@@ -9,7 +9,7 @@ export default [
     output: [
       {
         file: packageJson.main,
-        format: "cjs",
+        format: "esm",
         sourcemap: true,
       },
       {
@@ -23,7 +23,14 @@ export default [
         tsconfig: "./tsconfig.json",
       }),
     ],
-    external: ["react", "react-dom", "react/jsx-runtime", "viem"],
+    external: [
+      "react",
+      "react-dom",
+      "react/jsx-runtime",
+      "viem",
+      "axios",
+      "@safe-global/protocol-kit",
+    ],
   },
   {
     input: "src/index.ts",

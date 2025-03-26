@@ -2,12 +2,14 @@
 import dotenv from "dotenv";
 import { scroll } from "viem/chains";
 
-import { CoreActions } from "../src/helpers/CoreActions";
+// import { CoreActions } from "../src/helpers/CoreActions";
+
+import { ConsoleKit } from "../dist";
 
 dotenv.config(); // Load environment variables
 
 describe("CoreActions", () => {
-  let coreActions: CoreActions;
+  let kit: ConsoleKit;
 
   const apiKey = process.env.API_KEY as string;
   const baseURL = process.env.BASE_URL as string;
@@ -31,11 +33,11 @@ describe("CoreActions", () => {
     if (!apiKey || !baseURL) {
       throw new Error("Missing API_KEY or BASE_URL in environment variables");
     }
-    coreActions = new CoreActions(apiKey, baseURL);
+    kit = new ConsoleKit(apiKey, baseURL);
   });
 
   it("should fetch existing accounts for a given EOA", async () => {
-    const accounts = await coreActions.fetchExistingAccounts(eoa, {
+    const accounts = await kit.coreActions.fetchExistingAccounts(eoa, {
       chainId,
       ownersCount,
       threshold,
@@ -45,7 +47,7 @@ describe("CoreActions", () => {
   });
 
   it("should execute a new safe transaction with single threshold and return encoded data", async () => {
-    const result = await coreActions.newSafeTransactionWithSingleThreshold(
+    const result = await kit.coreActions.newSafeTransactionWithSingleThreshold(
       eoa,
       consoleAddress,
       chainId,
