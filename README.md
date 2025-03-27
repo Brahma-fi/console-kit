@@ -1,56 +1,36 @@
-![cover](./docs/img/banner.png)
+## Welcome to Brahma ConsoleKit!
 
-# ConsoleKit
+Brahma ConsoleKit enables developers to build automated workflows that operate securely and autonomously without requiring the writing of smart contracts or taking custody of user funds. The framework provides everything needed to create seamless workflows integrating both on-chain and off-chain elements.
 
-ConsoleKit enables agents to execute complex DeFi transactions on-chain. Any agent with any model can now transact autonomously with battle-tested security guardrails.
+### Key Features:
 
-- Manage user funds and execute complex operations at scale
-- Access modular functions for DeFi primitives: optimal routing, MEV protection, cross-chain liquidity
-- Users keep full custody and delegate access to Agents
-- Deploy agents on any interface: your website, telegram, or custom frontend
-- Enable cross-chain interactions with same programmable account and execution capabilities
-- Prevent unauthorized transactions with on-chain policy enforcement
-- Skip the complexity: accounts, policies, execution, RPC management all handled
+- **User Onboarding and Security:** Brahma abstracts the complexity of user account management, ensuring secure onboarding while maintaining full control over user assets.
+- **Automated Workflow Management:** Developers can design multi-step workflows with triggers, decision-making, and security guardrails, fully abstracted by ConsoleKit.
+- **No Custody:** Unlike traditional financial services, Brahma ensures that developers do not need to take custody of user funds, with users retaining full ownership and control over their assets at all times.
+- **Cross-Chain Execution:** Developers can build workflows that seamlessly interact with protocols across different blockchains.
+- **Off-Chain Inputs:** ConsoleKit supports off-chain data sources, such as api's, events and other sources enabling flexible interactions with various systems beyond the blockchain.
+- **Agentic Workflows:** For more complex systems, Brahma ConsoleKit enables the creation of fully autonomous agentic workflows, where intelligent, on-chain agents perform tasks like yield optimization or liquidity management.
 
-## What are Agents?
+### Developer Benefits:
 
-At their core, agents are automated decision-makers that execute your on-chain interactions. They monitor conditions, execute transactions, and manage positions based on predefined logic. Here's what makes them powerful:
+- **Simplified Development:** Developers can build, deploy, and scale workflows in a matter of days, cutting down 90% of traditional development time.
+- **Scalability and Flexibility:** ConsoleKit allows the creation of multi-chain automated systems with combination of on-chain protocols and off-chain services.
+- **Customization:** Developers can integrate off-chain logic or framework using Brahma’s flexible TypeScript SDK or native API's, abstracting built-in security, execution, and policy management tools.
+- **Built-In User Accounts:** ConsoleKit provides secure, multi-chain accounts for onboarding users, managing permissions, and executing transactions automatically without the need for external solutions.
 
-- **Always-On Execution**: Your agent can continuously monitor markets and execute operations
-- **Programmable Logic**: Define sophisticated conditions and actions using ConsoleKit's DeFi primitives
-- **Built-in Safety**: Every agent inherits Console's policy engine, protecting user funds with customizable constraints
+### Agentic Workflows:
 
-### Making Agents Smarter
+For advanced use cases, developers can build **Agentic Protocols** that enable agents to autonomously execute strategies across blockchains and protocols. These agents can collaborate, optimize operations, and manage decentralized assets on behalf of users, all while adhering to user defined security policies.
 
-While agents execute the strategies, you can enhance their decision-making by connecting them to external intelligence sources:
+Explore more on how to build [**Automated Workflows**](https://github.com/Brahma-fi/scaffold-agent) and [**Agentic Workflows**](./docs/agentic.md) using ConsoleKit.
 
-- **Market Intelligence**: Connect to price oracles, sentiment analyzers, and trading signal providers
-- **On-Chain Analytics**: Integrate on-chain data providers for wallet behavior, protocol metrics, and liquidity analysis
-- **Custom AI Models**: Plug in your own trained models for specialized strategy execution
+---
 
-These intelligence sources can be powered by AI models. For example, a DCA agent can be made smarter by:
-
-- Using sentiment analysis models to adjust buy amounts based on social media trends and news
-- Analyzing whale wallet movements to detect accumulation/distribution patterns
-- Learning from historical market behavior to optimize entry timing across different market conditions
-
-**ConsoleKit handles the secure execution** while you focus on integrating these intelligence systems.
-
-### Interfacing with Users
-
-DeFi agents often involve complex parameters and operations. Make them accessible through natural language interfaces so users can interact conversationally instead of setting technical parameters.
-
-Turn "Set a DCA strategy for 1000 USDC into ETH over 30 days with increased buys during high sentiment periods" into executable actions.
-
-Check out these examples demonstrating how to interface ConsoleKit agents with popular AI frameworks like openAi SDK, and langChain or directly as MCP server:
-
-- [MCP](https://github.com/Brahma-fi/scaffold-agent/tree/ft-mcpserver)
-- [OpenAI SDK](https://github.com/Brahma-fi/scaffold-agent/tree/ft-addOpenAi)
-- [LangChain](https://github.com/Brahma-fi/scaffold-agent/tree/ft-addLangchain)
+Now, all references to "you" are removed, with the correct third-person language. Let me know if there are any other areas that need further adjustments!
 
 ## System Architecture & Core Concepts
 
-The [System Architecture & Core Concepts documentation](./docs/introduction.md) provides a comprehensive overview of ConsoleKit's design principles, components, and terminology. This section is essential reading for developers to understand:
+The [Introduction](./docs/introduction.md) provides a comprehensive overview of ConsoleKit's components, and terminology. This section is essential reading for developers to understand:
 
 - Core architectural components and their interactions
 - Key terminologies and concepts used throughout the SDK

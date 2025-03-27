@@ -80,7 +80,7 @@ await _consoleKit.vendorCaller.submitTask({
 });
 ```
 
-This is a [sample automation agent](https://github.com/Brahma-fi/scaffold-agent/blob/main/kernel-workflow/src/agent-workflow.ts) which executes automated transfer at the users specified frequency
+This is a [sample automation agent](https://github.com/Brahma-fi/scaffold-agent/blob/main/kernel-workflow/src/automation-workflow.ts) which executes automated transfer at the users specified frequency
 
 ### 4. Lifecycle Management
 
@@ -137,3 +137,5 @@ The scaffold repository provides:
 
 - Complete example implementation
 - Ready-to-use boilerplate code
+
+## ### [← Subscriptions](./subscriptions.md) |  [Examples →](./examples.md)
