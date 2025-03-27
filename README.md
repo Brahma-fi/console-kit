@@ -22,7 +22,7 @@ Brahma ConsoleKit enables developers to build automated workflows that operate s
 
 For advanced use cases, developers can build **Agentic Protocols** that enable agents to autonomously execute strategies across blockchains and protocols. These agents can collaborate, optimize operations, and manage decentralized assets on behalf of users, all while adhering to user defined security policies.
 
-Explore more on how to build [**Automated Workflows**](https://chatgpt.com/g/g-p-67ac50e1e18481919b7cc96b18369f8b-brahma-console-kit/c/link-to-automated-workflow-readme) and [**Agentic Workflows**](./README-agentic.md) using ConsoleKit.
+Explore more on how to build [**Automated Workflows**](https://github.com/Brahma-fi/scaffold-agent) and [**Agentic Workflows**](./docs/agentic.md) using ConsoleKit.
 
 ---
 
