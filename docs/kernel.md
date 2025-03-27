@@ -137,3 +137,5 @@ The scaffold repository provides:
 
 - Complete example implementation
 - Ready-to-use boilerplate code
+
+## ### [← Subscriptions](./subscriptions.md) |  [Examples →](./examples.md)

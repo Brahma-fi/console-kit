@@ -1,5 +1,5 @@
 
-## Examples & Use-Cases
+## Examples
 
 Here's what you can build with Console Kit:
 

@@ -8,19 +8,19 @@ Brahma ConsoleKit enables developers to build automated workflows that operate s
 - **Automated Workflow Management:** Developers can design multi-step workflows with triggers, decision-making, and security guardrails, fully abstracted by ConsoleKit.
 - **No Custody:** Unlike traditional financial services, Brahma ensures that developers do not need to take custody of user funds, with users retaining full ownership and control over their assets at all times.
 - **Cross-Chain Execution:** Developers can build workflows that seamlessly interact with protocols across different blockchains.
-- **Off-Chain Inputs:** ConsoleKit supports off-chain data sources, such as bots and scripts, enabling flexible interactions with various systems beyond the blockchain.
+- **Off-Chain Inputs:** ConsoleKit supports off-chain data sources, such as api's, events and other sources enabling flexible interactions with various systems beyond the blockchain.
 - **Agentic Workflows:** For more complex systems, Brahma ConsoleKit enables the creation of fully autonomous agentic workflows, where intelligent, on-chain agents perform tasks like yield optimization or liquidity management.
 
 ### Developer Benefits:
 
 - **Simplified Development:** Developers can build, deploy, and scale workflows in a matter of days, cutting down 90% of traditional development time.
-- **Scalability and Flexibility:** ConsoleKit allows the creation of multi-chain automated systems with any combination of on-chain protocols and off-chain services.
-- **Customization:** Developers can integrate any off-chain logic or framework using Brahma’s flexible TypeScript SDK, abstracting built-in security, execution, and policy management tools.
+- **Scalability and Flexibility:** ConsoleKit allows the creation of multi-chain automated systems with combination of on-chain protocols and off-chain services.
+- **Customization:** Developers can integrate off-chain logic or framework using Brahma’s flexible TypeScript SDK or native API's, abstracting built-in security, execution, and policy management tools.
 - **Built-In User Accounts:** ConsoleKit provides secure, multi-chain accounts for onboarding users, managing permissions, and executing transactions automatically without the need for external solutions.
 
 ### Agentic Workflows:
 
-For more advanced use cases, developers can build **Agentic Protocols** that enable intelligent agents to autonomously execute complex strategies across blockchains and protocols. These agents can collaborate, optimize operations, and manage decentralized assets on behalf of users, all while adhering to defined security policies.
+For advanced use cases, developers can build **Agentic Protocols** that enable agents to autonomously execute strategies across blockchains and protocols. These agents can collaborate, optimize operations, and manage decentralized assets on behalf of users, all while adhering to user defined security policies.
 
 Explore more on how to build [**Automated Workflows**](https://chatgpt.com/g/g-p-67ac50e1e18481919b7cc96b18369f8b-brahma-console-kit/c/link-to-automated-workflow-readme) and [**Agentic Workflows**](./README-agentic.md) using ConsoleKit.
 
@@ -30,7 +30,7 @@ Now, all references to "you" are removed, with the correct third-person language
 
 ## System Architecture & Core Concepts
 
-The [Core Concepts documentation](./docs/introduction.md) provides a comprehensive overview of ConsoleKit's design principles, components, and terminology. This section is essential reading for developers to understand:
+The [Introduction](./docs/introduction.md) provides a comprehensive overview of ConsoleKit's components, and terminology. This section is essential reading for developers to understand:
 
 - Core architectural components and their interactions
 - Key terminologies and concepts used throughout the SDK
