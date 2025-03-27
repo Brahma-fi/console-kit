@@ -7,28 +7,22 @@ Developers can focus on building logic and workflows, while ConsoleKit handles t
 ### Key Features
 
 - **User Custody & Delegated Execution:**
-    
-    Users maintain full custody of their assets in their accounts, delegating execution permissions to workflows with defined restrictions.
+Users maintain full custody of their assets in their accounts, delegating execution permissions to workflows with defined restrictions.
     
 - **Simplified Infrastructure:**
-    
-    Account management, policy enforcement, execution, and RPC management are all handled by ConsoleKit, eliminating the need for developers to manage these components manually.
+Account management, policy enforcement, execution, and RPC management are all handled by ConsoleKit, eliminating the need for developers to manage these components manually.
     
 - **DeFi Primitives & Cross-Chain Integration:**
-    
-    Modular functions for DeFi primitives, such as optimal routing, MEV protection, and cross-chain liquidity, are exposed for easy integration into workflows.
+Modular functions for DeFi primitives, such as optimal routing, MEV protection, and cross-chain liquidity, are exposed for easy integration into workflows.
     
 - **On-Chain Policy Enforcement:**
-    
-    Prevent unauthorized transactions and ensure compliance of the workflow with security policies.
+Prevent unauthorized transactions and ensure compliance of the workflow with security policies.
     
 - **Interface Agnostic:**
-    
-    Expose workflows on any interface, whether it's a website, mobile app, or custom frontend, enabling seamless user experiences.
+Expose workflows on any interface, whether it's a website, mobile app, or custom frontend, enabling seamless user experiences.
     
 - **Cross-Chain Capabilities:**
-    
-    Manage interactions across multiple blockchains using a single programmable account, allowing for flexible cross-chain workflows.
+Manage interactions across multiple blockchains using a single programmable account, allowing for flexible cross-chain workflows.
     
 
 ### Differences Between Automated and Agentic Workflows
@@ -79,14 +73,15 @@ or
 yarn add brahma-console-kit
 ```
 
-## Getting Started with Template
+## Getting Started with templates
 
 To quickly bootstrap your ConsoleKit project, you can use our [scaffold agent repository](https://github.com/Brahma-fi/scaffold-agent)
+
+The scaffold repository includes a collection of example implementations showcasing how to build automated workflows using ConsoleKit. This repository demonstrates integration patterns ranging from automated workflows to agentic ones.
 
 Check out the ConsoleKit video explainer and setup workshop below
 [![YouTube](http://i.ytimg.com/vi/pLGP0Ag1Y8M/hqdefault.jpg)](https://www.youtube.com/watch?v=pLGP0Ag1Y8M)
 
-The scaffold repository includes a collection of example implementations showcasing how to build autonomous DeFi agents using ConsoleKit. This repository demonstrates integration patterns ranging from LLM-powered execution to automated DeFi workflows.
 
 ## Overview
 
