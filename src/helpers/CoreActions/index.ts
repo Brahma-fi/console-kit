@@ -5,7 +5,7 @@ import {
   encodeFunctionData,
   encodePacked,
   Hex,
-  http,
+  http
 } from "viem";
 import Safe from "@safe-global/protocol-kit";
 
@@ -20,10 +20,12 @@ import {
   GeneratePayload,
   GetBridgingRoutesParams,
   GetBridgingStatus,
+  MorphoDepositParams,
+  MorphoWithdrawParams,
   SendParams,
   SolverParams,
   SwapParams,
-  SwapQuoteRoute,
+  SwapQuoteRoute
 } from "./types";
 import { CHAIN_CONFIG } from "@/wagmi";
 import { SupportedChainIds } from "@/types";
@@ -39,8 +41,8 @@ export class CoreActions {
     this.axiosInstance = axios.create({
       baseURL,
       headers: {
-        "x-api-key": apiKey,
-      },
+        "x-api-key": apiKey
+      }
     });
     this.publicDeployer = new PublicDeployer(apiKey, baseURL);
   }
@@ -110,7 +112,7 @@ export class CoreActions {
 
         const publicClient = createPublicClient({
           chain: CHAIN_CONFIG[Number(chainId) as SupportedChainIds],
-          transport: http(),
+          transport: http()
         });
 
         const results = await publicClient.multicall({
@@ -118,14 +120,14 @@ export class CoreActions {
             {
               address: account.consoleAddress as Address,
               abi: safeAbi,
-              functionName: "getThreshold",
+              functionName: "getThreshold"
             },
             {
               address: account.consoleAddress as Address,
               abi: safeAbi,
-              functionName: "getOwners",
-            },
-          ]),
+              functionName: "getOwners"
+            }
+          ])
         });
 
         accounts.forEach((account, index) => {
@@ -164,6 +166,78 @@ export class CoreActions {
   }
 
   /**
+   * Generates calldata for depositing tokens into Morpho.
+   *
+   * @param {number} chainId - The ID of the blockchain network.
+   * @param {Address} accountAddress - The address of the user's account initiating the deposit.
+   * @param {MorphoDepositParams} params - The parameters for the deposit, including token details, amounts, and vaults.
+   * @returns {Promise<GenerateCalldataResponse>} A promise that resolves to a GenerateCalldataResponse object containing the transaction data.
+   * @throws Will throw an error if calldata generation fails.
+   */
+  async morphoDeposit(
+    chainId: number,
+    accountAddress: Address,
+    params: MorphoDepositParams
+  ): Promise<GenerateCalldataResponse> {
+    try {
+      const response = await this.axiosInstance.post<GenerateCalldataResponse>(
+        routes.generateCalldata,
+        {
+          id: "INTENT",
+          action: "BUILD",
+          params: {
+            id: ActionNameToId.morphoDeposit,
+            chainId: chainId,
+            consoleAddress: accountAddress,
+            params
+          }
+        } as GeneratePayload<MorphoDepositParams, "BUILD">
+      );
+
+      return response.data;
+    } catch (err: any) {
+      console.error(`Error generating calldata: ${err.message}`);
+      throw err;
+    }
+  }
+
+  /**
+   * Generates calldata for withdrawing tokens from Morpho.
+   *
+   * @param {number} chainId - The ID of the blockchain network.
+   * @param {Address} accountAddress - The address of the user's account initiating the withdrawal.
+   * @param {MorphoWithdrawParams} params - The parameters for the withdrawal, including vaults, amounts, and optional token conversion.
+   * @returns {Promise<GenerateCalldataResponse>} A promise that resolves to a GenerateCalldataResponse object containing the transaction data.
+   * @throws Will throw an error if calldata generation fails.
+   */
+  async morphoWithdraw(
+    chainId: number,
+    accountAddress: Address,
+    params: MorphoWithdrawParams
+  ): Promise<GenerateCalldataResponse> {
+    try {
+      const response = await this.axiosInstance.post<GenerateCalldataResponse>(
+        routes.generateCalldata,
+        {
+          id: "INTENT",
+          action: "BUILD",
+          params: {
+            id: ActionNameToId.morphoWithdraw,
+            chainId: chainId,
+            consoleAddress: accountAddress,
+            params
+          }
+        } as GeneratePayload<MorphoWithdrawParams, "BUILD">
+      );
+
+      return response.data;
+    } catch (err: any) {
+      console.error(`Error generating calldata: ${err.message}`);
+      throw err;
+    }
+  }
+
+  /**
    * Initiates a send action to generate calldata for transferring tokens on a blockchain network.
    *
    * @param {number} chainId - The ID of the blockchain network.
@@ -187,8 +261,8 @@ export class CoreActions {
             id: ActionNameToId.send,
             chainId: chainId,
             consoleAddress: accountAddress,
-            params,
-          },
+            params
+          }
         } as GeneratePayload<SendParams, "BUILD">
       );
 
@@ -223,8 +297,8 @@ export class CoreActions {
             id: ActionNameToId.swap,
             chainId: chainId,
             consoleAddress: accountAddress,
-            params,
-          },
+            params
+          }
         } as GeneratePayload<SwapParams, "BUILD">
       );
 
@@ -261,7 +335,7 @@ export class CoreActions {
       toAssetAddress,
       ownerAddress,
       fromAmount,
-      slippage,
+      slippage
     };
 
     try {
@@ -285,7 +359,7 @@ export class CoreActions {
 
       return {
         data: [],
-        error: error.response?.data?.message ?? error.message,
+        error: error.response?.data?.message ?? error.message
       };
     }
   }
@@ -314,8 +388,8 @@ export class CoreActions {
             id: ActionNameToId.bridging,
             chainId: chainId,
             consoleAddress: accountAddress,
-            params,
-          },
+            params
+          }
         } as GeneratePayload<BridgeParams, "BUILD">
       );
 
@@ -344,7 +418,7 @@ export class CoreActions {
         amountOut: params.amountOut.toString(),
         slippage: params.slippage.toString(),
         ownerAddress: params.ownerAddress,
-        recipient: params.recipient,
+        recipient: params.recipient
       }).toString();
 
       const url = `${routes.fetchBridgingRoutes}?${query}`;
@@ -375,7 +449,7 @@ export class CoreActions {
         pid: pid.toString(),
         transactionHash: txnHash,
         fromChainId: fromChainId.toString(),
-        toChainId: toChainId.toString(),
+        toChainId: toChainId.toString()
       });
 
       const response = await this.axiosInstance.get<GetBridgingStatus>(
@@ -437,9 +511,9 @@ export class CoreActions {
             consoleAddress: accountAddress,
             params: {
               ...params,
-              slippage: params.slippage * 1e2, // 4 basis points
-            },
-          },
+              slippage: params.slippage * 1e2 // 4 basis points
+            }
+          }
         } as GeneratePayload<SolverParams, "BUILD">
       );
 
@@ -491,12 +565,12 @@ export class CoreActions {
 
     const safe = await Safe.init({
       provider: rpcUrl,
-      safeAddress: consoleAddress,
+      safeAddress: consoleAddress
     });
 
     const transaction = await safe.createTransaction({
       transactions,
-      onlyCalls: false,
+      onlyCalls: false
     });
 
     const {
@@ -508,7 +582,7 @@ export class CoreActions {
       refundReceiver,
       safeTxGas,
       to,
-      value,
+      value
     } = transaction.data;
 
     const signature = encodePacked(
@@ -517,7 +591,7 @@ export class CoreActions {
         "0x000000000000000000000000",
         eoa,
         "0x0000000000000000000000000000000000000000000000000000000000000000",
-        "0x01",
+        "0x01"
       ]
     );
 
@@ -525,23 +599,23 @@ export class CoreActions {
       abi: safeAbi,
       functionName: "execTransaction",
       args: [
-        to,
+        to as Address,
         BigInt(value),
         data as Hex,
         operation,
         BigInt(safeTxGas),
         BigInt(baseGas),
         BigInt(gasPrice),
-        gasToken,
-        refundReceiver,
-        signature,
-      ],
+        gasToken as Address,
+        refundReceiver as Address,
+        signature
+      ]
     });
 
     return {
       to: consoleAddress,
       value: "0",
-      data: dataEncoded,
+      data: dataEncoded
     };
   }
 
