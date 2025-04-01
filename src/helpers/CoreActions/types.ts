@@ -21,7 +21,9 @@ export enum ActionNameToId {
   send = 301,
   swap = 309,
   bridging = 326,
-  solver = 248
+  solver = 248,
+  morphoDeposit = 332,
+  morphoWithdraw = 333
 }
 
 export type GeneratePayload<T, A extends ActionType> = A extends "BUILD"
@@ -62,6 +64,38 @@ export type GenerateCalldataResponse = {
     }[];
     metadata: any | null;
   };
+};
+
+/**
+ * Represents the parameters required for a deposit into Morpho.
+ *
+ * @property {Address} inputToken - The address of the token being deposited.
+ * @property {string[]} inputAmount - The amounts of the input token to deposit.
+ * @property {Address[]} vaults - The list of vault addresses where the deposit will be made.
+ * @property {number} slippage - The acceptable slippage percentage for the deposit.
+ */
+export type MorphoDepositParams = {
+  inputToken: Address;
+  inputAmount: string[];
+  vaults: Address[];
+  slippage: number;
+};
+
+/**
+ * Represents the parameters required for a withdrawal from Morpho.
+ *
+ * @property {boolean} convertToOutputToken - Whether to convert the withdrawn assets to a different token.
+ * @property {Address} [outputToken] - The address of the output token if conversion is enabled.
+ * @property {string[]} shareAmounts - The amounts of vault shares to withdraw.
+ * @property {Address[]} vaults - The list of vault addresses from which to withdraw.
+ * @property {number} slippage - The acceptable slippage percentage for the withdrawal.
+ */
+export type MorphoWithdrawParams = {
+  convertToOutputToken: boolean;
+  outputToken?: Address;
+  shareAmounts: string[];
+  vaults: Address[];
+  slippage: number;
 };
 
 /**
