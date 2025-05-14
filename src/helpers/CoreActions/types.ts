@@ -325,3 +325,15 @@ export type GetBridgingStatus = {
   sourceStatus: BridgingChainStatus;
   sourceTransactionHash: Address;
 };
+
+
+/**
+ * Represents a validator hook configuration.
+ *
+ * @property {Address} hookAddress - The address of the hook, should implement `validate(address, uint256, bytes)`.
+ * @property {boolean} enabled - Whether the hook is enabled.
+ */
+export type ValidatorHook = {
+  hookAddress: Address;
+  enabled: boolean;
+};

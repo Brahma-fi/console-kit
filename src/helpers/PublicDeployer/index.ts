@@ -1,6 +1,6 @@
 import { Address } from "viem";
 import axios, { AxiosInstance } from "axios";
-
+import { ValidatorHook } from "../CoreActions/types";
 import {
   AutomationSubscriptionLimits,
   PreComputedAddressData,
@@ -66,6 +66,7 @@ export class PublicDeployer {
    * @param {Address[]} tokens - The list of token addresses.
    * @param {string[]} amounts - The list of token amounts.
    * @param {AutomationSubscriptionLimits} automationSubscriptionLimits - The subscription limits.
+   * @param {ValidatorHook} validatorHook - (Optional) The validator hook, if enabled, hookAddress will be called before execution
    * @param {Record<string, unknown>} metadata - Additional metadata.
    * @returns {Promise<TransferCalldataResponse | null>} The transfer calldata response or null if an error occurs.
    */
@@ -79,7 +80,8 @@ export class PublicDeployer {
     tokens: Address[],
     amounts: string[],
     automationSubscriptionLimits: AutomationSubscriptionLimits,
-    metadata: Record<string, unknown>
+    metadata: Record<string, unknown>,
+    validatorHook?: ValidatorHook
   ): Promise<TransferCalldataResponse | null> {
     const payload = {
       owner,
@@ -92,6 +94,7 @@ export class PublicDeployer {
       tokens,
       amounts,
       metadata,
+      validatorHook,
     };
     try {
       const response = await this.axiosInstance.post(
