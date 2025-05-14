@@ -118,8 +118,8 @@ export type AutomationSubscription<T = {}> = {
  * @property {string} data.registryID - The registry ID associated with the automation.
  * @property {number} data.chainId - The ID of the blockchain network for the data.
  * @property {string} data.ownerAddress - The address of the owner subscribing to the automation.
- * @property {string} data.isApproval - (Optional) Indicates if this subscription serves as an approval intent.
- * @property {string} data.shouldNotUsePreDeployedSubAccount -  If true, prevents usage of pre-deployed sub-accounts.
+ * @property {boolean} data.isApproval - (Optional) Indicates if this subscription serves as an approval intent.
+ * @property {boolean} data.shouldNotUsePreDeployedSubAccount -  If true, prevents usage of pre-deployed sub-accounts.
  * @property {Address[]} [data.whitelistedAddresses] - (Optional) List of addresses allowed to interact with this subscription.
  */
 export type SubscribeAutomationParams = {
