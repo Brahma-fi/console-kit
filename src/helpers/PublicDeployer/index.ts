@@ -1,6 +1,5 @@
 import { Address } from "viem";
 import axios, { AxiosInstance } from "axios";
-import { ValidatorHook } from "../CoreActions/types";
 import {
   AutomationSubscriptionLimits,
   PreComputedAddressData,
@@ -66,8 +65,8 @@ export class PublicDeployer {
    * @param {Address[]} tokens - The list of token addresses.
    * @param {string[]} amounts - The list of token amounts.
    * @param {AutomationSubscriptionLimits} automationSubscriptionLimits - The subscription limits.
-   * @param {ValidatorHook} validatorHook - (Optional) The validator hook, if enabled, hookAddress will be called before execution
    * @param {Record<string, unknown>} metadata - Additional metadata.
+   * @param {Address} multisendAddress - The address of the multisend contract.
    * @returns {Promise<TransferCalldataResponse | null>} The transfer calldata response or null if an error occurs.
    */
   async generateAutomationSubAccount(
@@ -81,7 +80,7 @@ export class PublicDeployer {
     amounts: string[],
     automationSubscriptionLimits: AutomationSubscriptionLimits,
     metadata: Record<string, unknown>,
-    validatorHook?: ValidatorHook
+    multisendAddress?: Address
   ): Promise<TransferCalldataResponse | null> {
     const payload = {
       owner,
@@ -94,7 +93,7 @@ export class PublicDeployer {
       tokens,
       amounts,
       metadata,
-      validatorHook,
+      multisendAddress,
     };
     try {
       const response = await this.axiosInstance.post(

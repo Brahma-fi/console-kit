@@ -1,5 +1,4 @@
 import { Address } from "viem";
-import { ValidatorHook } from "../CoreActions/types";
 
 /**
  * Represents a log entry for an automation process.
@@ -122,7 +121,7 @@ export type AutomationSubscription<T = {}> = {
  * @property {boolean} data.isApproval - (Optional) Indicates if this subscription serves as an approval intent.
  * @property {boolean} data.shouldNotUsePreDeployedSubAccount -  If true, prevents usage of pre-deployed sub-accounts.
  * @property {Address[]} [data.whitelistedAddresses] - (Optional) List of addresses allowed to interact with this subscription.
- * @property {ValidatorHook} data.validatorHook - (Optional) Validator hook, if enabled, hookAddress will be called before execution
+ * @property {Address} [data.multisendAddress] - (Optional) The address of the multisend contract to be used for the subscription.
  */
 export type SubscribeAutomationParams = {
   chainId: number;
@@ -137,7 +136,7 @@ export type SubscribeAutomationParams = {
     isApproval?: boolean;
     shouldNotUsePreDeployedSubAccount?: boolean;
     whitelistedAddresses?: Address[];
-    validatorHook?: ValidatorHook;
+    multisendAddress?: Address;
   };
 };
 
