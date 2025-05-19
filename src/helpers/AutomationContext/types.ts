@@ -121,6 +121,7 @@ export type AutomationSubscription<T = {}> = {
  * @property {boolean} data.isApproval - (Optional) Indicates if this subscription serves as an approval intent.
  * @property {boolean} data.shouldNotUsePreDeployedSubAccount -  If true, prevents usage of pre-deployed sub-accounts.
  * @property {Address[]} [data.whitelistedAddresses] - (Optional) List of addresses allowed to interact with this subscription.
+ * @property {Address} [data.multisendAddress] - (Optional) The address of the multisend contract to be used for the subscription.
  */
 export type SubscribeAutomationParams = {
   chainId: number;
@@ -135,6 +136,7 @@ export type SubscribeAutomationParams = {
     isApproval?: boolean;
     shouldNotUsePreDeployedSubAccount?: boolean;
     whitelistedAddresses?: Address[];
+    multisendAddress?: Address;
   };
 };
 

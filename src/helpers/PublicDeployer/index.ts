@@ -1,6 +1,5 @@
 import { Address } from "viem";
 import axios, { AxiosInstance } from "axios";
-
 import {
   AutomationSubscriptionLimits,
   PreComputedAddressData,
@@ -67,6 +66,7 @@ export class PublicDeployer {
    * @param {string[]} amounts - The list of token amounts.
    * @param {AutomationSubscriptionLimits} automationSubscriptionLimits - The subscription limits.
    * @param {Record<string, unknown>} metadata - Additional metadata.
+   * @param {Address} multisendAddress - The address of the multisend contract.
    * @returns {Promise<TransferCalldataResponse | null>} The transfer calldata response or null if an error occurs.
    */
   async generateAutomationSubAccount(
@@ -79,7 +79,8 @@ export class PublicDeployer {
     tokens: Address[],
     amounts: string[],
     automationSubscriptionLimits: AutomationSubscriptionLimits,
-    metadata: Record<string, unknown>
+    metadata: Record<string, unknown>,
+    multisendAddress?: Address
   ): Promise<TransferCalldataResponse | null> {
     const payload = {
       owner,
@@ -92,6 +93,7 @@ export class PublicDeployer {
       tokens,
       amounts,
       metadata,
+      multisendAddress,
     };
     try {
       const response = await this.axiosInstance.post(
