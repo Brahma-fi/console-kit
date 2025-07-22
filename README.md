@@ -4,6 +4,10 @@ Brahma ConsoleKit equips developers with the tools to build **automated** and **
 
 Developers can focus on building logic and workflows, while ConsoleKit handles the complexities of security, execution, and automation.
 
+### Supported Chains
+- Base, Arbitrum, Ethereum, Binance Smart Chain, Berachain
+Sei support has been deprecated and is therefore not supported
+
 ### Key Features
 
 - **User Custody & Delegated Execution:**
@@ -23,7 +27,7 @@ Expose workflows on any interface, whether it's a website, mobile app, or custom
     
 - **Cross-Chain Capabilities:**
 Manage interactions across multiple blockchains using a single programmable account, allowing for flexible cross-chain workflows.
-    
+
 
 ### Differences Between Automated and Agentic Workflows
 
